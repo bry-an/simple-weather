@@ -1,19 +1,41 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img alt="Vue logo" :src="msg" />
+    <h1>{{ msg }}</h1>
+    <h1>{{ firstName }}</h1>
+    <HelloWorld
+      @submit="submitHandler"
+      a="123"
+      type="password"
+      msg="Welcome to Your Vue.js App!!!"
+    />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HelloWorld from "./components/HelloWorld.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    HelloWorld,
+  },
+  data: () => ({
+    showModal: false,
+    msg: "Whatever this component were",
+    name: "First Last",
+  }),
+  computed: {
+    firstName() {
+      return this.name.split(" ")[0];
+    },
+  },
+  methods: {
+    submitHandler: function (num1, num2, num3) {
+      console.log(num1, num2, num3);
+    },
+  },
+};
 </script>
 
 <style>
