@@ -8,19 +8,19 @@
 
 <script>
 export default {
-  name: "HelloWorld",
+  name: 'HelloWorld',
   props: {
     msg: { type: String, required: false },
-    type: { type: String, required: false },
+    type: { type: String, required: false }
   },
   data: () => ({}),
   methods: {
     submit: function () {
-      this.$emit("submit", 1, 2, 3);
-    },
+      this.$emit('submit', 1, 2, 3)
+    }
   },
-  computed: {},
-};
+  computed: {}
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

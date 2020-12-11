@@ -4,15 +4,15 @@
 
 <script>
 export default {
-  name: "Day",
+  name: 'Day',
   props: {
     active: { type: Boolean, default: false },
     dayOfTheWeek: { type: String, required: true },
     skyCover: { type: String, required: true },
     tempMax: { type: Number, required: true },
-    tempMin: { type: Number, required: true },
-  },
-};
+    tempMin: { type: Number, required: true }
+  }
+}
 </script>
 
 <style scoped>

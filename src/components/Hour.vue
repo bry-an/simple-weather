@@ -4,12 +4,12 @@
 
 <script>
 export default {
-  name: "Hour",
+  name: 'Hour',
   props: {
     time: { type: Number, required: true },
-    temp: { type: Number, required: true },
-  },
-};
+    temp: { type: Number, required: true }
+  }
+}
 </script>
 
 <style scoped>

@@ -13,29 +13,29 @@
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import HelloWorld from './components/HelloWorld.vue'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    HelloWorld,
+    HelloWorld
   },
   data: () => ({
     showModal: false,
-    msg: "Whatever this component were",
-    name: "First Last",
+    msg: 'Whatever this component were',
+    name: 'First Last'
   }),
   computed: {
     firstName() {
-      return this.name.split(" ")[0];
-    },
+      return this.name.split(' ')[0]
+    }
   },
   methods: {
     submitHandler: function (num1, num2, num3) {
-      console.log(num1, num2, num3);
-    },
-  },
-};
+      console.log(num1, num2, num3)
+    }
+  }
+}
 </script>
 
 <style>

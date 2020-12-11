@@ -4,9 +4,9 @@
 
 <script>
 export default {
-  name: "Card",
-  props: {},
-};
+  name: 'Card',
+  props: {}
+}
 </script>
 
 <style scoped>
