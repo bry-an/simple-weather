@@ -1,10 +1,10 @@
 <template>
-  <div>Chart</div>
+  <div>CurrentWeather</div>
 </template>
 
 <script>
 export default {
-  name: 'Chart',
+  name: 'CurrentWeather',
   props: {}
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+  <div>Day</div>
 </template>
 
 <script>

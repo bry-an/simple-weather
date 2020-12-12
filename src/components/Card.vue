@@ -1,5 +1,5 @@
 <template>
-  <div><CardHeader /><CardFooter /></div>
+  <div><CardHeader /> <CardFooter /></div>
 </template>
 
 <script>
