@@ -1,5 +1,5 @@
 <template>
-  <div>Chart</div>
+  <div class="chart flex-center">Chart</div>
 </template>
 
 <script>
@@ -10,4 +10,8 @@ export default {
 </script>
 
 <style scoped>
+.chart {
+  height: 100px;
+  background: grey;
+}
 </style>
