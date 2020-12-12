@@ -1,7 +1,6 @@
 <template>
-  <div id="footer">
-    <h2>Footer</h2>
-    <div class="flex-h">
+  <div class="footer">
+    <div class="row flex-even">
       <Day />
       <Day />
       <Day />
@@ -24,18 +23,11 @@ export default {
 </script>
 
 <style scoped>
-#footer {
-  margin: auto;
-  height: 200px;
-  width: 60%;
+.footer {
+  min-height: 100px;
   border: 1px solid black;
 }
-#footer > * {
+.footer > * {
   margin: 20px auto;
-}
-.flex-h {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
 }
 </style>

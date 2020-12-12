@@ -1,9 +1,17 @@
 <template>
-  <div id="header">
-    <h2>Header</h2>
+  <div class="header">
     <CurrentWeather />
     <Chart />
-    <Hour />
+    <div class="row flex-even">
+      <Hour />
+      <Hour />
+      <Hour />
+      <Hour />
+      <Hour />
+      <Hour />
+      <Hour />
+      <Hour />
+    </div>
   </div>
 </template>
 
@@ -20,13 +28,13 @@ export default {
 </script>
 
 <style scoped>
-#header {
-  margin: auto;
-  height: 200px;
-  width: 60%;
+.header {
+  min-height: 200px;
   border: 1px solid black;
+  padding: 20px;
 }
-#header > * {
+.header > * {
   margin: 20px auto;
+  width: 95%;
 }
 </style>
