@@ -1,7 +1,7 @@
 <template>
-  <div class="hour flex-center">
-    <div>29°</div>
-    <div>10PM</div>
+  <div class="hour-container">
+    <div class="temp">29°</div>
+    <div class="hour">10PM</div>
   </div>
 </template>
 
@@ -16,11 +16,18 @@ export default {
 </script>
 
 <style scoped>
-.hour {
-  height: 30px;
+.hour-container {
+  min-height: 50px;
+  height: 5rem;
+  display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 }
-.hour > * {
-  margin: 5px;
+.temp {
+  font-weight: bold;
+}
+.hour {
+  color: grey;
 }
 </style>

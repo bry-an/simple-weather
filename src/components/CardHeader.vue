@@ -2,15 +2,8 @@
   <div class="header">
     <CurrentWeather />
     <Chart />
-    <div class="row flex-even">
-      <Hour />
-      <Hour />
-      <Hour />
-      <Hour />
-      <Hour />
-      <Hour />
-      <Hour />
-      <Hour />
+    <div class="hours">
+      <Hour :key="item" v-for="item in items" />
     </div>
   </div>
 </template>
@@ -23,18 +16,22 @@ import Hour from '@C/Hour'
 export default {
   name: 'CardHeader',
   components: { CurrentWeather, Chart, Hour },
-  props: {}
+  props: {},
+  data: () => ({
+    items: [1, 2, 3, 4, 5, 6, 7, 8]
+  })
 }
 </script>
 
 <style scoped>
 .header {
-  min-height: 200px;
+  padding: 20px 20px 0 20px;
   border: 1px solid black;
-  padding: 20px;
 }
-.header > * {
-  margin: 20px auto;
-  width: 95%;
+
+.hours {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 </style>

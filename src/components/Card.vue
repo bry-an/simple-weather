@@ -1,5 +1,5 @@
 <template>
-  <div class="card"><CardHeader /> <CardFooter /></div>
+  <div><CardHeader /> <CardFooter /></div>
 </template>
 
 <script>
@@ -17,8 +17,4 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  width: 60%;
-  margin: auto;
-}
 </style>

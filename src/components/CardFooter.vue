@@ -1,13 +1,7 @@
 <template>
   <div class="footer">
     <div class="row flex-even">
-      <Day />
-      <Day />
-      <Day />
-      <Day />
-      <Day />
-      <Day />
-      <Day />
+      <Day :key="item" v-for="item in items" />
     </div>
   </div>
 </template>
@@ -18,7 +12,8 @@ import Day from '@C/Day'
 export default {
   name: 'CardFooter',
   components: { Day },
-  props: {}
+  props: {},
+  data: () => ({ items: [1, 2, 3, 4, 5, 6, 7] })
 }
 </script>
 
@@ -31,3 +26,5 @@ export default {
   margin: 20px auto;
 }
 </style>
+
+
