@@ -8,10 +8,7 @@
 <script>
 export default {
   name: 'Hour',
-  props: {
-    time: { type: Number, required: true },
-    temp: { type: Number, required: true }
-  }
+  props: {}
 }
 </script>
 
