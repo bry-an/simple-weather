@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Simple Weather</h1>
-    <Card />
+    <div class="card"><Card /></div>
   </div>
 </template>
 
@@ -18,6 +18,10 @@ export default {
   methods: {}
 }
 </script>
+
+<style>
+@import './assets/reset.css';
+</style>
 
 <style>
 #app {
@@ -48,5 +52,12 @@ export default {
 
 .flex-even {
   justify-content: space-evenly;
+}
+</style>
+
+<style scoped>
+.card {
+  width: 80%;
+  margin: auto;
 }
 </style>
