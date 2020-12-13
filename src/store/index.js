@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    activeDay: null,
+    selectedDay: null,
     dailyIsLoading: false,
     hourlyIsLoading: false,
     currentIsLoading: false,
@@ -24,6 +24,9 @@ export default new Vuex.Store({
     },
     current(state) {
       return state.currentWeather
+    },
+    selectedDayDt(state) {
+      return state.selectedDay?.dt
     }
   },
   mutations: {
@@ -36,8 +39,8 @@ export default new Vuex.Store({
     SET_CURRENT_WEATHER(state, currentWeather) {
       state.currentWeather = currentWeather
     },
-    SET_ACTIVE_DAY(state, day) {
-      state.activeDay = day
+    SET_SELECTED_DAY(state, day) {
+      state.selectedDay = day
     }
   },
   actions: {

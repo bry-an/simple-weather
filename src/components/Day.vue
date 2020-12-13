@@ -1,6 +1,9 @@
 <template>
-  <div @click="selectDay" class="day flex-center">
-    <div>{{ dayOfTheWeek }}</div>
+  <div
+    @click="selectDay"
+    :class="['day-container flex-center', { 'selected-day': isSelectedDay }]"
+  >
+    <div class="day">{{ dayOfTheWeek }}</div>
     <img :src="iconUrl" alt="it's really frosty, but I like it" />
     <div>{{ tempMax }}°</div>
     <div class="temp-min">{{ tempMin }}°</div>
@@ -14,6 +17,10 @@ export default {
     day: {
       type: Object,
       default: () => ({})
+    },
+    isSelectedDay: {
+      type: Boolean,
+      default: false
     }
   },
   data: () => ({}),
@@ -35,20 +42,25 @@ export default {
   },
   methods: {
     selectDay() {
-      console.log('selecting', this.day)
-      this.$store.commit('SET_ACTIVE_DAY', this.day)
+      this.$store.commit('SET_SELECTED_DAY', this.day)
     }
   }
 }
 </script>
 
 <style scoped>
-.day {
+.day-container {
   min-height: 20px;
   flex-direction: column;
+  cursor: pointer;
+  padding: 1rem;
+}
+.day-container.selected-day {
+  opacity: 1.2;
+  border: 1.4px solid gray;
 }
 
-.day > * {
+.day-container > * {
   margin: 3px;
 }
 .temp-min {
