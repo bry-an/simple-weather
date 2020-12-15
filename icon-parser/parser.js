@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer')
 const fs = require('fs')
+const path = require('path')
 
 const genIcons = () => {
   const s = {}
@@ -11,35 +12,44 @@ const genIcons = () => {
   return s
 }
 
-if (!fs.readdirSync('.').includes('icons.csv')) {
-  fs.writeFileSync('icons.csv', '', { encoding: 'utf-8' })
+if (!fs.readdirSync(__dirname).includes('icons.csv')) {
+  fs.writeFileSync(path.join(__dirname, 'icons.csv'), '', { encoding: 'utf-8' })
 }
-const cities = fs.readFileSync('cityList.csv', { encoding: 'utf-8' }).split(';')
+const cities = fs
+  .readFileSync(path.join(__dirname, 'cityList.csv'), { encoding: 'utf-8' })
+  .split(';')
 
 const s = genIcons()
 
 const parseCity = async (browser, cityName) => {
-  const list = fs.readFileSync('icons.csv', { encoding: 'utf-8' }).split('\n')
+  const list = fs
+    .readFileSync(path.join(__dirname, 'icons.csv'), { encoding: 'utf-8' })
+    .split('\n')
   const page = await browser.newPage()
   await page.goto(`https://duckduckgo.com/?q=${'weather ' + cityName}`)
 
   for (let i = 1; i < 9; i += 1) {
-    page.waitForSelector(s['ICON_' + i])
+    await page.waitForSelector(s['ICON_' + i])
     const src = await page.$eval(s['ICON_' + i], (el) => el.src)
     const iconName = src.match(/\/([a-z,-]+\.svg)$/i)[1]
     if (!list.includes(iconName)) list.push(iconName)
   }
-  fs.writeFileSync('icons.csv', list.join('\n'), { encoding: 'utf-8' })
+  fs.writeFileSync(path.join(__dirname, 'icons.csv'), list.join('\n'), {
+    encoding: 'utf-8'
+  })
   await page.close()
 }
 
 ;(async () => {
-  const browser = await puppeteer.launch({ headless: true })
+  const browser = await puppeteer.launch({ headless: false })
   const now = Date.now()
   for (const city of cities) {
     try {
+      console.log('Parsing icons for city: ' + city)
       await parseCity(browser, city)
+      console.log('Success')
     } catch (err) {
+      console.log('Error')
       console.log(city)
       console.log(err)
     }
