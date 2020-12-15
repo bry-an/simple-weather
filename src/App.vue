@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <h1>Simple Weather</h1>
     <div class="card"><Card /></div>
   </div>
 </template>

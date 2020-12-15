@@ -12,12 +12,17 @@
 import CurrentWeather from '@C/CurrentWeather'
 import Chart from '@C/Chart'
 import Hour from '@C/Hour'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CardHeader',
   components: { CurrentWeather, Chart, Hour },
   props: {},
+  computed: {
+    ...mapGetters(['hourly'])
+  },
   data: () => ({
+    currentDay: null,
     items: [1, 2, 3, 4, 5, 6, 7, 8]
   })
 }

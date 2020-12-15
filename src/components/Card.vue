@@ -12,9 +12,11 @@ export default {
     CardHeader,
     CardFooter
   },
-  props: {}
+  props: {},
+  created() {
+    this.$store.dispatch('getDailyWeather', { lat: 39.742043, lon: -104.991531 })
+  }
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

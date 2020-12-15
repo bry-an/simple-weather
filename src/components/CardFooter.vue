@@ -1,19 +1,22 @@
 <template>
   <div class="footer">
     <div class="row flex-even">
-      <Day :key="item" v-for="item in items" />
+      <Day :key="day.dt" v-for="day in daily" :day="day" />
     </div>
   </div>
 </template>
 
 <script>
 import Day from '@C/Day'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'CardFooter',
   components: { Day },
   props: {},
-  data: () => ({ items: [1, 2, 3, 4, 5, 6, 7] })
+  computed: {
+    ...mapGetters(['daily'])
+  }
 }
 </script>
 
@@ -26,5 +29,3 @@ export default {
   margin: 20px auto;
 }
 </style>
-
-

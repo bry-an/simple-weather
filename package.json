@@ -9,6 +9,7 @@
     "parse": "node icon-parser/parser"
   },
   "dependencies": {
+    "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "puppeteer": "^5.5.0",
     "vue": "^2.6.11",
