@@ -1,5 +1,5 @@
 <template>
-  <div @click="selectDay" class="day flex-center">
+  <div @click="selectDay" class="day">
     <div>{{ dayOfTheWeek }}</div>
     <img :src="iconUrl" alt="it's really frosty, but I like it" />
     <div>{{ tempMax }}°</div>
@@ -44,8 +44,11 @@ export default {
 
 <style scoped>
 .day {
-  min-height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
+  min-height: 20px;
 }
 
 .day > * {

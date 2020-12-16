@@ -1,5 +1,5 @@
 <template>
-  <div class="chart flex-center">Chart</div>
+  <div class="chart">Chart</div>
 </template>
 
 <script>
@@ -11,6 +11,9 @@ export default {
 
 <style scoped>
 .chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100px;
   background: grey;
 }
