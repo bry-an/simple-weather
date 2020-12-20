@@ -34,7 +34,25 @@ export default {
       return Math.round(this.day.temp.min)
     },
     iconUrl() {
-      return 'https://openweathermap.org/img/wn/' + this.day?.weather[0].icon + '.png'
+      // return 'https://openweathermap.org/img/wn/' + this.day?.weather[0].icon + '.png'
+      let icon = ''
+      switch (this.day?.weather[0].description) {
+        case 'overcast clouds':
+          icon = 'partly-cloudy-day.svg'
+          break
+        case 'scattered clouds':
+          icon = 'cloudy.svg'
+          break
+        case 'broken clouds':
+          icon = 'cloudy.svg'
+          break
+        case 'clear sky':
+          icon = 'clear-day.svg'
+          break
+        default:
+          return 'https://place-hold.it/50&text=icon'
+      }
+      return `https://duckduckgo.com/assets/weather/svg/new/${icon}`
     }
   },
   methods: {
@@ -47,6 +65,7 @@ export default {
 
 <style scoped>
 .day-container {
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
