@@ -26,6 +26,9 @@ export default new Vuex.Store({
     current(state) {
       return state.currentWeather
     },
+    selectedDay(state) {
+      return state.selectedDay
+    },
     selectedDayDt(state) {
       return state.selectedDay?.dt
     }

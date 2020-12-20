@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <CurrentWeather />
+    <CurrentWeather :selectedDay="selectedDay" />
     <Chart />
     <div class="hours">
       <Hour :key="item" v-for="item in items" />
@@ -19,7 +19,7 @@ export default {
   components: { CurrentWeather, Chart, Hour },
   props: {},
   computed: {
-    ...mapGetters(['hourly'])
+    ...mapGetters(['hourly', 'selectedDay'])
   },
   data: () => ({
     currentDay: null,
