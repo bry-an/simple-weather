@@ -1,7 +1,12 @@
 <template>
   <div class="footer">
     <div class="row flex-even">
-      <Day :key="day.dt" v-for="day in daily" :day="day" />
+      <Day
+        :key="day.dt"
+        v-for="day in daily"
+        :day="day"
+        :is-selected-day="selectedDayDt === day.dt"
+      />
     </div>
   </div>
 </template>
@@ -15,7 +20,12 @@ export default {
   components: { Day },
   props: {},
   computed: {
-    ...mapGetters(['daily'])
+    ...mapGetters(['daily', 'selectedDayDt'])
+  },
+  methods: {
+    isSelectedDay(day) {
+      return day.dt === this.selectedDay.dt
+    }
   }
 }
 </script>

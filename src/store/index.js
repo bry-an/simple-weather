@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
@@ -6,7 +7,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    activeDay: null,
+    selectedDay: null,
     dailyIsLoading: false,
     hourlyIsLoading: false,
     currentIsLoading: false,
@@ -24,6 +25,9 @@ export default new Vuex.Store({
     },
     current(state) {
       return state.currentWeather
+    },
+    selectedDayDt(state) {
+      return state.selectedDay?.dt
     }
   },
   mutations: {
@@ -36,8 +40,8 @@ export default new Vuex.Store({
     SET_CURRENT_WEATHER(state, currentWeather) {
       state.currentWeather = currentWeather
     },
-    SET_ACTIVE_DAY(state, day) {
-      state.activeDay = day
+    SET_SELECTED_DAY(state, day) {
+      state.selectedDay = day
     }
   },
   actions: {
@@ -63,6 +67,19 @@ export default new Vuex.Store({
       state.dailyIsLoading = false
       // let's leave it
       // snake_case_kinda_looks_like_a_snake
+      ;`
+      _________         _________
+      /         \       /         \
+     /  /~~~~~\  \     /  /~~~~~\  \
+     |  |     |  |     |  |     |  |
+     |  |     |  |     |  |     |  |
+     |  |     |  |     |  |     |  |         /
+     |  |     |  |     |  |     |  |       //
+    (o  o)    \  \_____/  /     \  \_____/ /
+     \__/      \         /       \        /
+      |         ~~~~~~~~~         ~~~~~~~~
+      ^
+    `
     }
   }
 })
