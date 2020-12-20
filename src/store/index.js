@@ -66,6 +66,19 @@ export default new Vuex.Store({
       state.dailyIsLoading = false
       // let's leave it
       // snake_case_kinda_looks_like_a_snake
+      ;`
+      _________         _________
+      /         \       /         \
+     /  /~~~~~\  \     /  /~~~~~\  \
+     |  |     |  |     |  |     |  |
+     |  |     |  |     |  |     |  |
+     |  |     |  |     |  |     |  |         /
+     |  |     |  |     |  |     |  |       //
+    (o  o)    \  \_____/  /     \  \_____/ /
+     \__/      \         /       \        /
+      |         ~~~~~~~~~         ~~~~~~~~
+      ^
+    `
     }
   }
 })
