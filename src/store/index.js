@@ -64,6 +64,7 @@ export default new Vuex.Store({
       const url = `https://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=${lat}&lon=${lon}&appid=f3d7426d2e77aa4e3212b0537db8d3a8`
       const response = await axios.get(url)
       commit('SET_DAILY_WEATHER', response.data)
+      commit('SET_SELECTED_DAY', response.data.daily[0])
       state.dailyIsLoading = false
       // let's leave it
       // snake_case_kinda_looks_like_a_snake
