@@ -54,9 +54,10 @@ export default {
   min-height: 20px;
   cursor: pointer;
   padding: 1rem;
+  border: 1.4px solid #ffffffff;
 }
 .day-container.selected-day {
-  opacity: 1.2;
+  opacity: 1;
   border: 1.4px solid gray;
 }
 .day-container > * {
