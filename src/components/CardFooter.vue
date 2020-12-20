@@ -1,13 +1,11 @@
 <template>
   <div class="footer">
-    <div class="row flex-even">
-      <Day
-        :key="day.dt"
-        v-for="day in daily"
-        :day="day"
-        :is-selected-day="selectedDayDt === day.dt"
-      />
-    </div>
+    <Day
+      :key="day.dt"
+      v-for="day in daily"
+      :day="day"
+      :is-selected-day="selectedDayDt === day.dt"
+    />
   </div>
 </template>
 
@@ -32,6 +30,9 @@ export default {
 
 <style scoped>
 .footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
   min-height: 100px;
   border: 1px solid black;
 }

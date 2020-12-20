@@ -1,8 +1,5 @@
 <template>
-  <div
-    @click="selectDay"
-    :class="['day-container flex-center', { 'selected-day': isSelectedDay }]"
-  >
+  <div @click="selectDay" :class="['day-container', { 'selected-day': isSelectedDay }]">
     <div class="day">{{ dayOfTheWeek }}</div>
     <img :src="iconUrl" alt="it's really frosty, but I like it" />
     <div>{{ tempMax }}°</div>
@@ -50,8 +47,11 @@ export default {
 
 <style scoped>
 .day-container {
-  min-height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
+  min-height: 20px;
   cursor: pointer;
   padding: 1rem;
 }
@@ -59,7 +59,6 @@ export default {
   opacity: 1.2;
   border: 1.4px solid gray;
 }
-
 .day-container > * {
   margin: 3px;
 }
