@@ -1,50 +1,40 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" :src="msg" />
-    <h1>{{ msg }}</h1>
-    <h1>{{ firstName }}</h1>
-    <HelloWorld
-      @submit="submitHandler"
-      a="123"
-      type="password"
-      msg="Welcome to Your Vue.js App!!!"
-    />
+    <div class="card"><Card /></div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Card from '@C/Card.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Card
   },
-  data: () => ({
-    showModal: false,
-    msg: 'Whatever this component were',
-    name: 'First Last'
-  }),
-  computed: {
-    firstName() {
-      return this.name.split(' ')[0]
-    }
-  },
-  methods: {
-    submitHandler: function (num1, num2, num3) {
-      console.log(num1, num2, num3)
-    }
-  }
+  data: () => ({}),
+  computed: {},
+  methods: {}
 }
 </script>
+
+<style>
+@import './assets/reset.css';
+</style>
 
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+</style>
+
+<style scoped>
+.card {
+  width: 80%;
+  margin: auto;
 }
 </style>
