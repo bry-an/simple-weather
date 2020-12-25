@@ -1,30 +1,29 @@
 <template>
   <div class="header">
-    <CurrentWeather />
+    <CurrentWeather :selectedDay="selectedDay" />
     <Chart />
-    <div class="hours">
-      <Hour :key="item" v-for="item in items" />
+    <div v-if="hourlyIsLoaded" class="hours">
+      <Hour v-for="hourData in hourlyEight" :hourData="hourData" :key="hourData.number" />
+    </div>
+    <div v-else class="hours">
+      Loading...
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import CurrentWeather from '@C/CurrentWeather'
 import Chart from '@C/Chart'
 import Hour from '@C/Hour'
-import { mapGetters } from 'vuex'
 
 export default {
   name: 'CardHeader',
   components: { CurrentWeather, Chart, Hour },
   props: {},
   computed: {
-    ...mapGetters(['hourly'])
-  },
-  data: () => ({
-    currentDay: null,
-    items: [1, 2, 3, 4, 5, 6, 7, 8]
-  })
+    ...mapGetters(['selectedDay', 'hourlyIsLoaded', 'hourlyEight'])
+  }
 }
 </script>
 

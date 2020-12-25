@@ -36,7 +36,4 @@ export default {
   min-height: 100px;
   border: 1px solid black;
 }
-.footer > * {
-  margin: 20px auto;
-}
 </style>
