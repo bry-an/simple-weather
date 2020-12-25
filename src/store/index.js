@@ -13,6 +13,7 @@ export default new Vuex.Store({
     currentIsLoaded: false,
     currentWeather: null,
     hourlyWeather: null,
+    hourlyEightWeather: null,
     dailyWeather: null,
     city: ''
   },
@@ -34,6 +35,9 @@ export default new Vuex.Store({
     },
     hourlyIsLoaded(state) {
       return state.hourlyIsLoaded
+    },
+    hourlyEight(state) {
+      return state.hourlyEightWeather
     }
   },
   mutations: {
@@ -48,6 +52,9 @@ export default new Vuex.Store({
     },
     SET_SELECTED_DAY(state, day) {
       state.selectedDay = day
+    },
+    SET_HOURLY_EIGHT(state, hourlyEightWeather) {
+      state.hourlyEightWeather = hourlyEightWeather
     }
   },
   actions: {
@@ -89,6 +96,35 @@ export default new Vuex.Store({
       |         ~~~~~~~~~         ~~~~~~~~
       ^
     `
+    },
+    getHourlyEight({ state, commit }) {
+      const dateSelected = new Date(state.selectedDay.dt * 1000)
+      const dateRightNow = new Date()
+      // figure out where to start
+
+      // assuming the selected day is the same as the day it is right now by default
+      let x = 0
+
+      // if not then finding where to start
+      if (dateSelected.toString().slice(0, 15) !== dateRightNow.toString().slice(0, 15)) {
+        const index = state.hourlyWeather.properties.periods.findIndex(
+          (i) =>
+            new Date(i.startTime).toString().slice(0, 15) ===
+            dateSelected.toString().slice(0, 15)
+        )
+        x = index >= 0 ? index : NaN
+      }
+      const hourlyEightData = [
+        state.hourlyWeather.properties.periods[x + 0],
+        state.hourlyWeather.properties.periods[x + 3],
+        state.hourlyWeather.properties.periods[x + 6],
+        state.hourlyWeather.properties.periods[x + 9],
+        state.hourlyWeather.properties.periods[x + 12],
+        state.hourlyWeather.properties.periods[x + 15],
+        state.hourlyWeather.properties.periods[x + 18],
+        state.hourlyWeather.properties.periods[x + 21]
+      ]
+      commit('SET_HOURLY_EIGHT', hourlyEightData)
     }
   }
 })
