@@ -14,7 +14,7 @@ export default {
       return this.hourData.temperature
     },
     hour() {
-      const hr24 = new Date(this.hourData.endTime).getHours()
+      const hr24 = new Date(this.hourData.startTime).getHours()
       return hr24 > 12 ? hr24 - 12 + 'PM' : hr24 === 0 ? 12 + 'AM' : hr24 + 'AM'
     }
   }
