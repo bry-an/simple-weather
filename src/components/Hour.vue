@@ -1,14 +1,23 @@
 <template>
   <div class="hour-container">
-    <div class="temp">29°</div>
-    <div class="hour">10PM</div>
+    <div class="temp">{{ temp }}°</div>
+    <div class="hour">{{ hour }}</div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Hour',
-  props: {}
+  props: { hourData: { type: Object, required: true } },
+  computed: {
+    temp() {
+      return this.hourData.temperature
+    },
+    hour() {
+      const hr24 = new Date(this.hourData.endTime).getHours()
+      return hr24 > 12 ? hr24 - 12 + 'PM' : hr24 === 0 ? 12 + 'AM' : hr24 + 'AM'
+    }
+  }
 }
 </script>
 
