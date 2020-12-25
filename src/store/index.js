@@ -84,7 +84,7 @@ export default new Vuex.Store({
       // let's leave it
       // snake_case_kinda_looks_like_a_snake
       ;`
-      _________         _________
+       _________         _________
       /         \       /         \
      /  /~~~~~\  \     /  /~~~~~\  \
      |  |     |  |     |  |     |  |
@@ -93,8 +93,8 @@ export default new Vuex.Store({
      |  |     |  |     |  |     |  |       //
     (o  o)    \  \_____/  /     \  \_____/ /
      \__/      \         /       \        /
-      |         ~~~~~~~~~         ~~~~~~~~
-      ^
+       |         ~~~~~~~~~         ~~~~~~~~
+       ^
     `
     },
     getHourlyEight({ state, commit }) {
