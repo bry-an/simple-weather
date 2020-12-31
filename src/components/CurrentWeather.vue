@@ -2,7 +2,7 @@
   <div>
     <div class="current-weather">
       <div class="city">Denver, CO</div>
-      <div class="synopsis">Thursday 10 PM · Light Snow</div>
+      <div class="synopsis">{{ selectedDate }}</div>
     </div>
     <div>
       <div class="weather-details">
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'CurrentWeather',
   props: {
@@ -36,6 +37,32 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['selectedDayDt']),
+    selectedDate() {
+      // * Should be of that format
+      // * Thursday 10 PM · Light Snow
+      // ! not accurate to the hour
+      const printDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' })
+      // ! why does it start with Saturday??!?
+      // const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Friday', 'Saturday']
+      const cDate = new Date(this.selectedDayDt ? this.selectedDayDt * 1000 : 0)
+      // const cDay = days[cDate.getDay()]
+      const cDay = printDay.format(cDate)
+      const cHour24 = cDate.getHours()
+      const cHour12 =
+        cHour24 > 12 ? cHour24 - 12 + ' PM' : cHour24 === 0 ? 12 + ' AM' : cHour24 + ' AM'
+
+      return `${cDay} ${cHour12} · ${this.selectedDescription}`
+    },
+    selectedDescription() {
+      return this.selectedDay?.weather[0].description.replace(
+        /(^|\s)([a-z]+)/gi,
+        // eslint-disable-next-line no-unused-vars
+        function(match, p1, p2, offset, string, groups) {
+          return p1 + p2[0].toUpperCase() + p2.slice(1)
+        }
+      )
+    },
     selectedTemp() {
       // ! not accurate to the hour
       return Math.round(this.selectedDay?.temp.day)
