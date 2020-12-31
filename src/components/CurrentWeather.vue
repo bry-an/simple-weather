@@ -42,9 +42,12 @@ export default {
       // * Should be of that format
       // * Thursday 10 PM · Light Snow
       // ! not accurate to the hour
-      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Friday', 'Saturday']
-      const cDate = new Date(this.selectedDayDt * 1000)
-      const cDay = days[cDate.getDay()]
+      const printDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' })
+      // ! why does it start with Saturday??!?
+      // const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Friday', 'Saturday']
+      const cDate = new Date(this.selectedDayDt ? this.selectedDayDt * 1000 : 0)
+      // const cDay = days[cDate.getDay()]
+      const cDay = printDay.format(cDate)
       const cHour24 = cDate.getHours()
       const cHour12 =
         cHour24 > 12 ? cHour24 - 12 + ' PM' : cHour24 === 0 ? 12 + ' AM' : cHour24 + ' AM'
