@@ -16,7 +16,6 @@ export default {
   data: () => ({}),
   created() {
     this.$store.dispatch('getDailyWeather', { lat: 39.742043, lon: -104.991531 })
-    this.$store.dispatch('getHourlyWeather', { lat: 39.742043, lon: -104.991531 })
   }
 }
 </script>

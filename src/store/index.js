@@ -14,6 +14,7 @@ export default new Vuex.Store({
     currentWeather: null,
     hourlyWeather: null,
     hourlyEightWeather: null,
+    hourlyEightChartData: null,
     dailyWeather: null,
     city: ''
   },
@@ -38,6 +39,9 @@ export default new Vuex.Store({
     },
     hourlyEight(state) {
       return state.hourlyEightWeather
+    },
+    hourlyEightChartData(state) {
+      return state.hourlyEightChartData
     }
   },
   mutations: {
@@ -50,11 +54,11 @@ export default new Vuex.Store({
     SET_CURRENT_WEATHER(state, currentWeather) {
       state.currentWeather = currentWeather
     },
-    SET_SELECTED_DAY(state, day) {
-      state.selectedDay = day
-    },
     SET_HOURLY_EIGHT(state, hourlyEightWeather) {
       state.hourlyEightWeather = hourlyEightWeather
+    },
+    SET_HOURLY_EIGHT_CHART_DATA(state, hourlyEightChartData) {
+      state.hourlyEightChartData = hourlyEightChartData
     }
   },
   actions: {
@@ -65,23 +69,30 @@ export default new Vuex.Store({
       commit('SET_CURRENT_WEATHER', response.data)
       state.currentIsLoaded = true
     },
-    async getHourlyWeather({ state, commit }, { lat, lon }) {
+    getHourlyWeather({ state, commit }, { lat, lon }) {
       state.hourlyIsLoaded = false
       const initialUrl = `https://api.weather.gov/points/${lat},${lon}`
-      const initialResponse = await axios.get(initialUrl)
-      const hourlyForecastUrl = initialResponse.data.properties.forecastHourly
-      const hourlyResponse = await axios.get(hourlyForecastUrl)
-      commit('SET_HOURLY_WEATHER', hourlyResponse.data)
-      state.hourlyIsLoaded = true
+      return axios.get(initialUrl).then((initialResponse) => {
+        const hourlyForecastUrl = initialResponse.data.properties.forecastHourly
+        return axios.get(hourlyForecastUrl).then((hourlyResponse) => {
+          commit('SET_HOURLY_WEATHER', hourlyResponse.data)
+          state.hourlyIsLoaded = true
+        })
+      })
     },
-    async getDailyWeather({ state, commit }, { lat, lon }) {
+    setSelectedDay({ state, dispatch }, day) {
+      state.selectedDay = day
+      dispatch('getHourlyEight')
+    },
+    async getDailyWeather({ state, commit, dispatch }, { lat, lon }) {
       state.dailyIsLoaded = false
       const url = `https://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=${lat}&lon=${lon}&appid=f3d7426d2e77aa4e3212b0537db8d3a8`
       const response = await axios.get(url)
       commit('SET_DAILY_WEATHER', response.data)
-      commit('SET_SELECTED_DAY', response.data.daily[0])
+      await dispatch('getHourlyWeather', { lat, lon }) // await this response, before we call:
+      dispatch('setSelectedDay', response.data.daily[0])
       state.dailyIsLoaded = true // let's leave it
-      // snake_case_kinda_looks_like_a_snake
+      // snake_case_kinda_looks_like_ar_snake
       ;`
        _________         _________
       /         \       /         \
@@ -96,7 +107,7 @@ export default new Vuex.Store({
        ^
     `
     },
-    getHourlyEight({ state, commit }) {
+    getHourlyEight({ state, commit, dispatch }) {
       const dateSelected = new Date(state.selectedDay.dt * 1000)
       const dateRightNow = new Date()
       // figure out where to start
@@ -113,6 +124,8 @@ export default new Vuex.Store({
         )
         x = index >= 0 ? index : NaN
       }
+
+      console.log(JSON.parse(JSON.stringify(state.hourlyWeather)))
       const hourlyEightData = [
         state.hourlyWeather.properties.periods[x + 0],
         state.hourlyWeather.properties.periods[x + 3],
@@ -124,6 +137,14 @@ export default new Vuex.Store({
         state.hourlyWeather.properties.periods[x + 21]
       ]
       commit('SET_HOURLY_EIGHT', hourlyEightData)
+      dispatch('createChartData')
+    },
+    createChartData({ state, commit }) {
+      const chartData = state.hourlyEightWeather.map((hour) => ({
+        x: new Date(hour.startTime),
+        y: hour.temperature
+      }))
+      commit('SET_HOURLY_EIGHT_CHART_DATA', chartData)
     }
   }
 })

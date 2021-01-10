@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     selectDay() {
-      this.$store.commit('SET_SELECTED_DAY', this.day)
+      this.$store.dispatch('setSelectedDay', this.day)
     }
   }
 }
