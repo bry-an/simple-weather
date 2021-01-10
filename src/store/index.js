@@ -80,8 +80,7 @@ export default new Vuex.Store({
       const response = await axios.get(url)
       commit('SET_DAILY_WEATHER', response.data)
       commit('SET_SELECTED_DAY', response.data.daily[0])
-      state.dailyIsLoaded = true
-      // let's leave it
+      state.dailyIsLoaded = true // let's leave it
       // snake_case_kinda_looks_like_a_snake
       ;`
        _________         _________

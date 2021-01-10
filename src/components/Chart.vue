@@ -1,20 +1,13 @@
-<template>
-  <div class="chart">Chart</div>
-</template>
-
 <script>
+import { Line } from 'vue-chartjs'
+
 export default {
-  name: 'Chart',
-  props: {}
+  extends: Line,
+  props: ['chartData', 'chartOptions'],
+  mounted() {
+    this.renderChart(this.chartData, this.chartOptions)
+  }
 }
 </script>
 
-<style scoped>
-.chart {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100px;
-  background: grey;
-}
-</style>
+<style></style>

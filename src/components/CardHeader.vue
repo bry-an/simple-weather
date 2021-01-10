@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <CurrentWeather :selectedDay="selectedDay" />
-    <Chart />
+    <Chart :chartData="chartData" :chartOptions="chartOptions" />
     <div v-if="hourlyIsLoaded" class="hours">
       <Hour v-for="hourData in hourlyEight" :hourData="hourData" :key="hourData.number" />
     </div>
@@ -21,6 +21,78 @@ export default {
   name: 'CardHeader',
   components: { CurrentWeather, Chart, Hour },
   props: {},
+  data: () => ({
+    chartData: {
+      datasets: [
+        {
+          label: 'Weather Data I am the cool label',
+          backgroundColor: '#ffffff',
+          borderColor: '#000000',
+          fill: false,
+          data: [
+            {
+              x: 1,
+              y: 1
+            },
+            {
+              x: 2,
+              y: 2
+            },
+            {
+              x: 1,
+              y: 1
+            },
+            {
+              x: 1,
+              y: 1
+            }
+          ]
+        }
+      ]
+    },
+    chartOptions: {
+      gridLines: {
+        display: false
+      },
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Chart.js Time Point Data'
+        }
+      },
+      scales: {
+        x: {
+          type: 'time',
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Time'
+          },
+          gridLines: {
+            display: false
+          },
+          ticks: {
+            display: true,
+            color: '#00ffff'
+          }
+        },
+        y: {
+          gridLines: {
+            display: false
+          },
+          display: true,
+          scaleLabel: {
+            display: true,
+            labelString: 'Temp'
+          },
+          ticks: {
+            display: false
+          }
+        }
+      }
+    }
+  }),
   computed: {
     ...mapGetters(['selectedDay', 'hourlyIsLoaded', 'hourlyEight'])
   }
