@@ -2,7 +2,7 @@
   <div class="header">
     <CurrentWeather :selectedDay="selectedDay" />
     <div v-if="hourlyEightChartData" class="chart-wrapper">
-      <Chart :height="200" :width="400" :hourlyEightChartData="hourlyEightChartData" />
+      <Chart :hourlyEightChartData="hourlyEightChartData" />
     </div>
     <div v-else>:(</div>
     <div v-if="hourlyIsLoaded" class="hours">
@@ -50,8 +50,9 @@ export default {
 }
 
 .chart-wrapper {
-  /* height: 200px; */
-  width: 75%;
+  position: relative;
+  height: 10vh;
+  width: 50vw;
   margin: auto;
 }
 </style>

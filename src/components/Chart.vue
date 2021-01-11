@@ -1,7 +1,10 @@
+<template>
+  <canvas ref="chartRef" id="myChart"></canvas>
+</template>
+
 <script>
-import { Line } from 'vue-chartjs'
+import { Chart } from 'chart.js/dist/Chart.min.js'
 export default {
-  extends: Line,
   props: ['hourlyEightChartData'],
   data: () => ({
     chartData: {
@@ -13,69 +16,72 @@ export default {
           backgroundColor: '#f1f1f1',
           borderWidth: 0,
           borderColor: '#f1f1f1',
-          // fill: false,
           data: []
         }
       ]
     },
     chartOptions: {
+      scaleShowLabels: false,
+      maintainAspectRatio: false,
       responsive: true,
-      gridLines: {
+      legend: {
         display: false
       },
-      plugins: {
-        title: {
-          display: true,
-          text: 'Chart.js Time Point Data'
-        }
+      gridLines: {
+        display: false
       },
       scales: {
         xAxes: [
           {
-            gridLines: {
+            id: 'x',
+            display: false,
+            scaleLabel: {
               display: false
             }
           }
         ],
         yAxes: [
           {
-            gridLines: {
+            id: 'y',
+            display: false,
+            scaleLabel: {
               display: false
+            },
+            ticks: {
+              major: {
+                enabled: false
+              }
             }
           }
-        ],
-        x: {
-          type: 'time',
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'Time'
-          },
-          ticks: {
-            display: true,
-            color: '#00ffff'
-          }
-        },
-        y: {
-          display: true,
-          scaleLabel: {
-            display: true,
-            labelString: 'Temp'
-          },
-          ticks: {
-            display: false
-          }
-        }
+        ]
       }
     }
   }),
+  // xAxes: [
+  //   {
+  //   }
+  // ],
+  // yAxes: [
+  //   {
+  //     weight: 5000,
+  //     gridLines: {
+  //       display: false
+  //     }
+  //   }
+  // ]
   mounted() {
-    this.chartData.datasets[0].data = this.hourlyEightChartData
     // this.chartData.labels = this.hourlyEightChartData
-    this.renderChart(this.chartData, this.chartOptions)
-  },
-  created() {
-    console.log('123!', this.hourlyEightChartData)
+    this.chartData.datasets[0].data = this.hourlyEightChartData
+    const chartRefContext = this.$refs.chartRef.getContext('2d')
+    // const myChart =
+    new Chart(chartRefContext, {
+      scaleStartValue: 0,
+      type: 'line',
+      data: this.chartData,
+      options: this.chartOptions
+    })
+    // this.renderChart(this.chartData, this.chartOptions)
+    // this.chartData.datasets[0].data = this.hourlyEightChartData
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div style="card-wrapper"><CardHeader /> <CardFooter /></div>
+  <div><CardHeader /> <CardFooter /></div>
 </template>
 
 <script>
@@ -20,8 +20,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.card-wrapper {
-  width: 60%;
-}
-</style>
+<style scoped></style>
