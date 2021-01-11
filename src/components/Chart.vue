@@ -50,13 +50,35 @@ export default {
             ticks: {
               major: {
                 enabled: false
-              }
+              },
+              min: 0,
+              max: 100
             }
           }
         ]
       }
     }
   }),
+  computed: {
+    minTemp() {
+      let smallest = this.hourlyEightChartData[0].y
+      this.hourlyEightChartData.forEach((item) => {
+        if (item.y < smallest) {
+          smallest = item.y
+        }
+      })
+      return smallest
+    },
+    maxTemp() {
+      let largest = this.hourlyEightChartData[0].y
+      this.hourlyEightChartData.forEach((item) => {
+        if (item.y > largest) {
+          largest = item.y
+        }
+      })
+      return largest
+    }
+  },
   // xAxes: [
   //   {
   //   }
@@ -72,6 +94,8 @@ export default {
   mounted() {
     // this.chartData.labels = this.hourlyEightChartData
     this.chartData.datasets[0].data = this.hourlyEightChartData
+    this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
+    this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
     const chartRefContext = this.$refs.chartRef.getContext('2d')
     // const myChart =
     new Chart(chartRefContext, {
