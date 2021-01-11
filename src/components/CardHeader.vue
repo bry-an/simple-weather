@@ -1,7 +1,9 @@
 <template>
   <div class="header">
     <CurrentWeather :selectedDay="selectedDay" />
-    <Chart v-if="hourlyEightChartData" :hourlyEightChartData="hourlyEightChartData" />
+    <div v-if="hourlyEightChartData" class="chart-wrapper">
+      <Chart :height="200" :width="400" :hourlyEightChartData="hourlyEightChartData" />
+    </div>
     <div v-else>:(</div>
     <div v-if="hourlyIsLoaded" class="hours">
       <Hour v-for="hourData in hourlyEight" :hourData="hourData" :key="hourData.number" />
@@ -45,5 +47,11 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+
+.chart-wrapper {
+  /* height: 200px; */
+  width: 75%;
+  margin: auto;
 }
 </style>

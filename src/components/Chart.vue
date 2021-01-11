@@ -1,26 +1,28 @@
 <script>
 import { Line } from 'vue-chartjs'
-
 export default {
   extends: Line,
   props: ['hourlyEightChartData'],
   data: () => ({
     chartData: {
+      labels: ['', '', '', '', '', '', '', ''],
       datasets: [
         {
-          label: 'Weather Data I am the cool label',
-          backgroundColor: '#ffffff',
-          borderColor: '#000000',
-          fill: false,
+          pointRadius: 0,
+          lineTension: 0.4,
+          backgroundColor: '#f1f1f1',
+          borderWidth: 0,
+          borderColor: '#f1f1f1',
+          // fill: false,
           data: []
         }
       ]
     },
     chartOptions: {
+      responsive: true,
       gridLines: {
         display: false
       },
-      responsive: true,
       plugins: {
         title: {
           display: true,
@@ -28,6 +30,20 @@ export default {
         }
       },
       scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false
+            }
+          }
+        ],
+        yAxes: [
+          {
+            gridLines: {
+              display: false
+            }
+          }
+        ],
         x: {
           type: 'time',
           display: true,
@@ -35,18 +51,12 @@ export default {
             display: true,
             labelString: 'Time'
           },
-          gridLines: {
-            display: false
-          },
           ticks: {
             display: true,
             color: '#00ffff'
           }
         },
         y: {
-          gridLines: {
-            display: false
-          },
           display: true,
           scaleLabel: {
             display: true,
@@ -60,8 +70,8 @@ export default {
     }
   }),
   mounted() {
-    console.log('heyyaaaa!', this.hourlyEightChartData)
     this.chartData.datasets[0].data = this.hourlyEightChartData
+    // this.chartData.labels = this.hourlyEightChartData
     this.renderChart(this.chartData, this.chartOptions)
   },
   created() {
