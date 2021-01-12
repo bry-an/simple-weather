@@ -5,7 +5,7 @@
 <script>
 import { Chart } from 'chart.js/dist/Chart.min.js'
 export default {
-  props: ['hourlyEightChartData'],
+  props: ['hourlyChartData'],
   data: () => ({
     chartData: {
       labels: ['', '', '', '', '', '', '', ''],
@@ -61,8 +61,8 @@ export default {
   }),
   computed: {
     minTemp() {
-      let smallest = this.hourlyEightChartData[0].y
-      this.hourlyEightChartData.forEach((item) => {
+      let smallest = this.hourlyChartData[0].y
+      this.hourlyChartData.forEach((item) => {
         if (item.y < smallest) {
           smallest = item.y
         }
@@ -70,8 +70,8 @@ export default {
       return smallest
     },
     maxTemp() {
-      let largest = this.hourlyEightChartData[0].y
-      this.hourlyEightChartData.forEach((item) => {
+      let largest = this.hourlyChartData[0].y
+      this.hourlyChartData.forEach((item) => {
         if (item.y > largest) {
           largest = item.y
         }
@@ -92,7 +92,7 @@ export default {
   //   }
   // ]
   mounted() {
-    this.chartData.datasets[0].data = this.hourlyEightChartData
+    this.chartData.datasets[0].data = this.hourlyChartData
     this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
     this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
     const chartRefContext = this.$refs.chartRef.getContext('2d')

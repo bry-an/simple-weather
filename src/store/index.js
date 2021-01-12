@@ -14,7 +14,7 @@ export default new Vuex.Store({
     currentWeather: null,
     hourlyWeather: null,
     hourlyEightWeather: null,
-    hourlyEightChartData: null,
+    hourlyChartData: null,
     dailyWeather: null,
     city: ''
   },
@@ -40,8 +40,8 @@ export default new Vuex.Store({
     hourlyEight(state) {
       return state.hourlyEightWeather
     },
-    hourlyEightChartData(state) {
-      return state.hourlyEightChartData
+    hourlyChartData(state) {
+      return state.hourlyChartData
     }
   },
   mutations: {
@@ -57,8 +57,8 @@ export default new Vuex.Store({
     SET_HOURLY_EIGHT(state, hourlyEightWeather) {
       state.hourlyEightWeather = hourlyEightWeather
     },
-    SET_HOURLY_EIGHT_CHART_DATA(state, hourlyEightChartData) {
-      state.hourlyEightChartData = hourlyEightChartData
+    SET_HOURLY_EIGHT_CHART_DATA(state, hourlyChartData) {
+      state.hourlyChartData = hourlyChartData
     }
   },
   actions: {
