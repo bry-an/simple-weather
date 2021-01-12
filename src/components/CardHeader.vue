@@ -51,7 +51,7 @@ export default {
 
 .chart-wrapper {
   position: relative;
-  height: 10vh;
+  height: 100px;
   width: 50vw;
   margin: auto;
 }

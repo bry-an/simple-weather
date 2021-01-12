@@ -13,9 +13,9 @@ export default {
         {
           pointRadius: 0,
           lineTension: 0.4,
-          backgroundColor: '#f1f1f1',
-          borderWidth: 0,
-          borderColor: '#f1f1f1',
+          backgroundColor: '#f2f2f2',
+          borderWidth: 2,
+          borderColor: '#aaaaaa',
           data: []
         }
       ]
@@ -92,20 +92,16 @@ export default {
   //   }
   // ]
   mounted() {
-    // this.chartData.labels = this.hourlyEightChartData
     this.chartData.datasets[0].data = this.hourlyEightChartData
     this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
     this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
     const chartRefContext = this.$refs.chartRef.getContext('2d')
-    // const myChart =
     new Chart(chartRefContext, {
       scaleStartValue: 0,
       type: 'line',
       data: this.chartData,
       options: this.chartOptions
     })
-    // this.renderChart(this.chartData, this.chartOptions)
-    // this.chartData.datasets[0].data = this.hourlyEightChartData
   }
 }
 </script>
