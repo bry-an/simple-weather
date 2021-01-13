@@ -4,8 +4,8 @@
 
 <script>
 import { Chart } from 'chart.js/dist/Chart.min.js'
+import { mapGetters } from 'vuex'
 export default {
-  props: ['hourlyChartData'],
   data: () => ({
     chartData: {
       labels: ['', '', '', '', '', '', '', ''],
@@ -57,9 +57,11 @@ export default {
           }
         ]
       }
-    }
+    },
+    chartInstance: null
   }),
   computed: {
+    ...mapGetters(['hourlyChartData']),
     minTemp() {
       let smallest = this.hourlyChartData[0].y
       this.hourlyChartData.forEach((item) => {
@@ -91,17 +93,36 @@ export default {
   //     }
   //   }
   // ]
+  watch: {
+    hourlyChartData() {
+      console.log('DATA CHANGED WATCHER?? FINALLY?')
+      // this.$forceUpdate()
+      console.log('UPDAETEEE!')
+      this.chartData.datasets[0].data = this.hourlyChartData
+      this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
+      this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
+      this.chartInstance.update()
+    }
+  },
   mounted() {
+    console.log('MOUNTTED!')
     this.chartData.datasets[0].data = this.hourlyChartData
     this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
     this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
     const chartRefContext = this.$refs.chartRef.getContext('2d')
-    new Chart(chartRefContext, {
+    const chartInstance = new Chart(chartRefContext, {
       scaleStartValue: 0,
       type: 'line',
       data: this.chartData,
       options: this.chartOptions
     })
+    this.chartInstance = chartInstance
+  },
+  updated() {
+    //  everything used to be here
+  },
+  beforeUpdate() {
+    console.log('OK NOW????')
   }
 }
 </script>

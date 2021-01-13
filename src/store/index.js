@@ -125,7 +125,6 @@ export default new Vuex.Store({
         x = index >= 0 ? index : NaN
       }
 
-      console.log(JSON.parse(JSON.stringify(state.hourlyWeather)))
       const hourlyEightData = [
         state.hourlyWeather.properties.periods[x + 0],
         state.hourlyWeather.properties.periods[x + 3],

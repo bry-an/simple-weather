@@ -2,7 +2,7 @@
   <div class="header">
     <CurrentWeather :selectedDay="selectedDay" />
     <div v-if="hourlyChartData" class="chart-wrapper">
-      <Chart :hourlyChartData="hourlyChartData" />
+      <Chart />
     </div>
     <div v-else>:(</div>
     <div v-if="hourlyIsLoaded" class="hours">
@@ -28,7 +28,9 @@ export default {
   computed: {
     ...mapGetters(['selectedDay', 'hourlyIsLoaded', 'hourlyEight', 'hourlyChartData'])
   },
-  mounted() {}
+  updated() {
+    console.log('this is a big update..')
+  }
 }
 </script>
 
