@@ -4,8 +4,8 @@
 
 <script>
 import { Chart } from 'chart.js/dist/Chart.min.js'
+import { mapGetters } from 'vuex'
 export default {
-  props: ['hourlyEightChartData'],
   data: () => ({
     chartData: {
       labels: ['', '', '', '', '', '', '', ''],
@@ -13,9 +13,9 @@ export default {
         {
           pointRadius: 0,
           lineTension: 0.4,
-          backgroundColor: '#f1f1f1',
-          borderWidth: 0,
-          borderColor: '#f1f1f1',
+          backgroundColor: '#f2f2f2',
+          borderWidth: 2,
+          borderColor: '#aaaaaa',
           data: []
         }
       ]
@@ -57,21 +57,24 @@ export default {
           }
         ]
       }
-    }
+    },
+    chartInstance: null
   }),
   computed: {
+    ...mapGetters(['hourlyChartData']),
     minTemp() {
-      let smallest = this.hourlyEightChartData[0].y
-      this.hourlyEightChartData.forEach((item) => {
+      let smallest = this.hourlyChartData[0].y
+      this.hourlyChartData.forEach((item) => {
         if (item.y < smallest) {
           smallest = item.y
         }
       })
+      console.log('min temp runs', smallest)
       return smallest
     },
     maxTemp() {
-      let largest = this.hourlyEightChartData[0].y
-      this.hourlyEightChartData.forEach((item) => {
+      let largest = this.hourlyChartData[0].y
+      this.hourlyChartData.forEach((item) => {
         if (item.y > largest) {
           largest = item.y
         }
@@ -91,21 +94,41 @@ export default {
   //     }
   //   }
   // ]
+  watch: {
+    hourlyChartData() {
+      console.log('DATA CHANGED WATCHER?? FINALLY?')
+      // this.$forceUpdate()
+      this.chartData.datasets[0].data = this.hourlyChartData
+      this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
+      this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
+      console.log(
+        "that's what we have",
+        JSON.parse(JSON.stringify(this.chartOptions.scales.yAxes[0].ticks))
+      )
+      this.chartInstance.update()
+    }
+  },
   mounted() {
-    // this.chartData.labels = this.hourlyEightChartData
-    this.chartData.datasets[0].data = this.hourlyEightChartData
+    console.log('MOUNTTED!')
+    this.chartData.datasets[0].data = this.hourlyChartData
     this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
     this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
     const chartRefContext = this.$refs.chartRef.getContext('2d')
-    // const myChart =
-    new Chart(chartRefContext, {
+    const chartInstance = new Chart(chartRefContext, {
       scaleStartValue: 0,
       type: 'line',
       data: this.chartData,
       options: this.chartOptions
     })
-    // this.renderChart(this.chartData, this.chartOptions)
-    // this.chartData.datasets[0].data = this.hourlyEightChartData
+    this.chartInstance = chartInstance
+  },
+  updated() {
+    //  everything used to be here
+    // but it didnt' work
+    console.log('UPDAETEEE!')
+  },
+  beforeUpdate() {
+    console.log('OK NOW????')
   }
 }
 </script>

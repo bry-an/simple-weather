@@ -52,6 +52,9 @@ export default {
         case 'few clouds':
           icon = 'partly-cloudy-day.svg'
           break
+        case 'snow':
+          icon = 'snow.svg'
+          break
         case 'light snow':
           icon = 'snow.svg'
           break
