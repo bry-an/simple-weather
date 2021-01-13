@@ -85,15 +85,15 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-height: 20px;
   cursor: pointer;
   padding: 1rem;
   border-right: 1.4px solid gray;
+  border-top: 1.4px solid gray;
 }
 .day-container.selected-day {
   opacity: 1;
-  border-right: 1.4px solid gray;
   background-color: #eeeeee;
+  border-top: 1.5px solid black;
 }
 .day-container:last-child {
   border: none;
