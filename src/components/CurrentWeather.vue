@@ -8,10 +8,7 @@
       <div class="weather-details">
         <div class="weather-overview">
           <div>
-            <img
-              src="https://duckduckgo.com/assets/weather/svg/new/snow.svg"
-              alt="it's really frosty, but I like it"
-            />
+            <img :src="iconUrl" alt="it's really frosty, but I like it" />
           </div>
           <div>{{ selectedTemp }}°</div>
           <div>F</div>
@@ -87,6 +84,33 @@ export default {
       else if (degree >= 258.75 && degree < 281.25) return 'W'
       else if (degree >= 281.25 && degree < 348.75) return 'NW'
       else return '?'
+    },
+    iconUrl() {
+      // return 'https://openweathermap.org/img/wn/' + this.day?.weather[0].icon + '.png'
+      let icon = ''
+      switch (this.selectedDay?.weather[0].description) {
+        case 'overcast clouds':
+          icon = 'partly-cloudy-day.svg'
+          break
+        case 'scattered clouds':
+          icon = 'cloudy.svg'
+          break
+        case 'broken clouds':
+          icon = 'cloudy.svg'
+          break
+        case 'clear sky':
+          icon = 'clear-day.svg'
+          break
+        case 'few clouds':
+          icon = 'partly-cloudy-day.svg'
+          break
+        case 'light snow':
+          icon = 'snow.svg'
+          break
+        default:
+          return 'https://place-hold.it/50&text=icon'
+      }
+      return `https://duckduckgo.com/assets/weather/svg/new/${icon}`
     }
   }
 }

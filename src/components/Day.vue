@@ -49,6 +49,12 @@ export default {
         case 'clear sky':
           icon = 'clear-day.svg'
           break
+        case 'few clouds':
+          icon = 'partly-cloudy-day.svg'
+          break
+        case 'light snow':
+          icon = 'snow.svg'
+          break
         default:
           return 'https://place-hold.it/50&text=icon'
       }
