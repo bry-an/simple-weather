@@ -98,9 +98,9 @@ export default {
     hourlyChartData() {
       console.log('DATA CHANGED WATCHER?? FINALLY?')
       // this.$forceUpdate()
-      this.chartData.datasets[0].data = this.hourlyChartData
-      this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
-      this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
+      this.chartInstance.data.datasets[0].data = this.hourlyChartData
+      this.chartInstance.options.scales.yAxes[0].ticks.min = this.minTemp - 10
+      this.chartInstance.options.scales.yAxes[0].ticks.max = this.maxTemp + 10
       console.log(
         "that's what we have",
         JSON.parse(JSON.stringify(this.chartOptions.scales.yAxes[0].ticks))
