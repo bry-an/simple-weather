@@ -88,11 +88,15 @@ export default {
   min-height: 20px;
   cursor: pointer;
   padding: 1rem;
-  border: 1.4px solid #ffffffff;
+  border-right: 1.4px solid gray;
 }
 .day-container.selected-day {
   opacity: 1;
-  border: 1.4px solid gray;
+  border-right: 1.4px solid gray;
+  background-color: #eeeeee;
+}
+.day-container:last-child {
+  border: none;
 }
 .day-container > * {
   margin: 3px;

@@ -37,7 +37,6 @@ export default {
 <style scoped>
 .header {
   padding: 20px 20px 0 20px;
-  border: 1px solid black;
 }
 
 .hours {

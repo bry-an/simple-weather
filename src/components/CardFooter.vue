@@ -34,6 +34,6 @@ export default {
   flex-direction: row;
   justify-content: space-evenly;
   min-height: 100px;
-  border: 1px solid black;
+  border-top: 1px solid black;
 }
 </style>

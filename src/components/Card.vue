@@ -1,5 +1,5 @@
 <template>
-  <div><CardHeader /> <CardFooter /></div>
+  <div class="card-border"><CardHeader /> <CardFooter /></div>
 </template>
 
 <script>
@@ -20,4 +20,10 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.card-border {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 1px 1px 3px 3px #bbb;
+}
+</style>
