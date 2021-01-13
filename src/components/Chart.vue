@@ -69,6 +69,7 @@ export default {
           smallest = item.y
         }
       })
+      console.log('min temp runs', smallest)
       return smallest
     },
     maxTemp() {
@@ -97,10 +98,13 @@ export default {
     hourlyChartData() {
       console.log('DATA CHANGED WATCHER?? FINALLY?')
       // this.$forceUpdate()
-      console.log('UPDAETEEE!')
       this.chartData.datasets[0].data = this.hourlyChartData
       this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
       this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
+      console.log(
+        "that's what we have",
+        JSON.parse(JSON.stringify(this.chartOptions.scales.yAxes[0].ticks))
+      )
       this.chartInstance.update()
     }
   },
@@ -120,6 +124,8 @@ export default {
   },
   updated() {
     //  everything used to be here
+    // but it didnt' work
+    console.log('UPDAETEEE!')
   },
   beforeUpdate() {
     console.log('OK NOW????')
