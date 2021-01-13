@@ -96,7 +96,7 @@ export default {
   border-top: 1.5px solid black;
 }
 .day-container:last-child {
-  border: none;
+  border-right: none;
 }
 .day-container > * {
   margin: 3px;
