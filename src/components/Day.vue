@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import tempConversionMixin from '../mixins/tempConversion.js'
 export default {
   name: 'Day',
   props: {
@@ -20,18 +22,22 @@ export default {
       default: false
     }
   },
+  mixins: [tempConversionMixin],
   data: () => ({}),
   computed: {
+    ...mapGetters(['fahrenheit']),
     dayOfTheWeek() {
       return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
         new Date(this.day.dt * 1000).getDay()
       ]
     },
     tempMax() {
-      return Math.round(this.day.temp.max)
+      const temp = Math.round(this.day.temp.max)
+      return this.fahrenheit ? temp : this.fahrenheitToCelsius(temp)
     },
     tempMin() {
-      return Math.round(this.day.temp.min)
+      const temp = Math.round(this.day.temp.min)
+      return this.fahrenheit ? temp : this.fahrenheitToCelsius(temp)
     },
     iconUrl() {
       // return 'https://openweathermap.org/img/wn/' + this.day?.weather[0].icon + '.png'

@@ -8,10 +8,20 @@
       <div class="weather-details">
         <div class="weather-overview">
           <div>
-            <img :src="iconUrl" alt="it's really frosty, but I like it" />
+            <img :src="iconUrl" class="icon" alt="it's really frosty, but I like it" />
           </div>
-          <div>{{ selectedTemp }}°</div>
-          <div>F</div>
+          <div class="temp">
+            {{ selectedTemp }}°
+            <span class="unit-container">
+              <span @click="selectUnit('f')" :class="['unit', { selected: fahrenheit }]"
+                >F</span
+              >
+              /
+              <span @click="selectUnit('c')" :class="['unit', { selected: !fahrenheit }]"
+                >C</span
+              >
+            </span>
+          </div>
         </div>
         <div class="weather-report">
           <div>Humidity: {{ selectedHumidity }}%</div>
@@ -25,6 +35,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import tempConversionMixin from '../mixins/tempConversion.js'
 export default {
   name: 'CurrentWeather',
   props: {
@@ -33,8 +44,9 @@ export default {
       default: () => ({})
     }
   },
+  mixins: [tempConversionMixin],
   computed: {
-    ...mapGetters(['selectedDayDt']),
+    ...mapGetters(['selectedDayDt', 'fahrenheit', 'temperatureUnit']),
     selectedDate() {
       // * Should be of that format
       // * Thursday 10 PM · Light Snow
@@ -62,7 +74,10 @@ export default {
     },
     selectedTemp() {
       // ! not accurate to the hour
-      return Math.round(this.selectedDay?.temp.day)
+      const temp = this.fahrenheit
+        ? Math.round(this.selectedDay?.temp.day)
+        : this.fahrenheitToCelsius(Math.round(this.selectedDay?.temp.day))
+      return Number.isNaN(temp) ? '' : temp
     },
     selectedHumidity() {
       // ! not accurate to the hour
@@ -112,11 +127,40 @@ export default {
       }
       return `https://duckduckgo.com/assets/weather/svg/new/${icon}`
     }
+  },
+  methods: {
+    selectUnit(unit) {
+      if (this.temperatureUnit !== unit) {
+        this.$store.commit('SET_UNIT', unit)
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
+.temp {
+  font-size: 3rem;
+  font-family: sans-serif;
+  display: flex;
+  justify-content: start;
+}
+.icon {
+  width: 4rem;
+}
+.unit-container {
+  font-size: 1rem;
+  margin-left: 0.3rem;
+  margin-top: 0.2rem;
+  color: #aaaaaa;
+}
+.unit {
+  cursor: pointer;
+}
+.selected {
+  color: black;
+  text-decoration: underline;
+}
 .current-weather {
   margin: 10px;
   text-align: left;
@@ -142,6 +186,7 @@ export default {
   padding: 0 0 0 2%;
   display: flex;
   justify-content: start;
+  align-items: center;
 }
 
 .weather-report {

@@ -16,7 +16,8 @@ export default new Vuex.Store({
     hourlyEightWeather: null,
     hourlyChartData: null,
     dailyWeather: null,
-    city: ''
+    city: '',
+    temperatureUnit: 'f'
   },
   getters: {
     daily(state) {
@@ -42,6 +43,12 @@ export default new Vuex.Store({
     },
     hourlyChartData(state) {
       return state.hourlyChartData
+    },
+    fahrenheit(state) {
+      return state.temperatureUnit === 'f'
+    },
+    temperatureUnit(state) {
+      return state.temperatureUnit
     }
   },
   mutations: {
@@ -59,6 +66,9 @@ export default new Vuex.Store({
     },
     SET_HOURLY_EIGHT_CHART_DATA(state, hourlyChartData) {
       state.hourlyChartData = hourlyChartData
+    },
+    SET_UNIT(state, unit) {
+      state.temperatureUnit = unit
     }
   },
   actions: {
