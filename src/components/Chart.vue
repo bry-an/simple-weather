@@ -82,53 +82,34 @@ export default {
       return largest
     }
   },
-  // xAxes: [
-  //   {
-  //   }
-  // ],
-  // yAxes: [
-  //   {
-  //     weight: 5000,
-  //     gridLines: {
-  //       display: false
-  //     }
-  //   }
-  // ]
   watch: {
     hourlyChartData() {
-      console.log('DATA CHANGED WATCHER?? FINALLY?')
-      // this.$forceUpdate()
-      this.chartInstance.data.datasets[0].data = this.hourlyChartData
-      this.chartInstance.options.scales.yAxes[0].ticks.min = this.minTemp - 10
-      this.chartInstance.options.scales.yAxes[0].ticks.max = this.maxTemp + 10
-      console.log(
-        "that's what we have",
-        JSON.parse(JSON.stringify(this.chartOptions.scales.yAxes[0].ticks))
-      )
-      this.chartInstance.update()
+      this.updateChartWithNewData()
     }
   },
   mounted() {
-    console.log('MOUNTTED!')
-    this.chartData.datasets[0].data = this.hourlyChartData
-    this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
-    this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
-    const chartRefContext = this.$refs.chartRef.getContext('2d')
-    const chartInstance = new Chart(chartRefContext, {
-      scaleStartValue: 0,
-      type: 'line',
-      data: this.chartData,
-      options: this.chartOptions
-    })
-    this.chartInstance = chartInstance
+    this.chartInit()
   },
-  updated() {
-    //  everything used to be here
-    // but it didnt' work
-    console.log('UPDAETEEE!')
-  },
-  beforeUpdate() {
-    console.log('OK NOW????')
+  methods: {
+    chartInit() {
+      this.chartData.datasets[0].data = this.hourlyChartData
+      this.chartOptions.scales.yAxes[0].ticks.min = this.minTemp - 10
+      this.chartOptions.scales.yAxes[0].ticks.max = this.maxTemp + 10
+      const chartRefContext = this.$refs.chartRef.getContext('2d')
+      const chartInstance = new Chart(chartRefContext, {
+        scaleStartValue: 0,
+        type: 'line',
+        data: this.chartData,
+        options: this.chartOptions
+      })
+      this.chartInstance = chartInstance
+    },
+    updateChartWithNewData() {
+      this.chartInstance.data.datasets[0].data = this.hourlyChartData
+      this.chartInstance.options.scales.yAxes[0].ticks.min = this.minTemp - 10
+      this.chartInstance.options.scales.yAxes[0].ticks.max = this.maxTemp + 10
+      this.chartInstance.update()
+    }
   }
 }
 </script>
