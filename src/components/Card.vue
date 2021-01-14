@@ -1,5 +1,5 @@
 <template>
-  <div><CardHeader /> <CardFooter /></div>
+  <div class="card-border"><CardHeader /> <CardFooter /></div>
 </template>
 
 <script>
@@ -16,9 +16,14 @@ export default {
   data: () => ({}),
   created() {
     this.$store.dispatch('getDailyWeather', { lat: 39.742043, lon: -104.991531 })
-    this.$store.dispatch('getHourlyWeather', { lat: 39.742043, lon: -104.991531 })
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.card-border {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 1px 1px 3px 3px #bbb;
+}
+</style>

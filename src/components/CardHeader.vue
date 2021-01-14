@@ -1,7 +1,10 @@
 <template>
   <div class="header">
     <CurrentWeather :selectedDay="selectedDay" />
-    <Chart />
+    <div v-if="hourlyChartData" class="chart-wrapper">
+      <Chart />
+    </div>
+    <div v-else>:(</div>
     <div v-if="hourlyIsLoaded" class="hours">
       <Hour v-for="hourData in hourlyEight" :hourData="hourData" :key="hourData.number" />
     </div>
@@ -21,8 +24,12 @@ export default {
   name: 'CardHeader',
   components: { CurrentWeather, Chart, Hour },
   props: {},
+  data: () => ({}),
   computed: {
-    ...mapGetters(['selectedDay', 'hourlyIsLoaded', 'hourlyEight'])
+    ...mapGetters(['selectedDay', 'hourlyIsLoaded', 'hourlyEight', 'hourlyChartData'])
+  },
+  updated() {
+    console.log('this is a big update..')
   }
 }
 </script>
@@ -30,12 +37,18 @@ export default {
 <style scoped>
 .header {
   padding: 20px 20px 0 20px;
-  border: 1px solid black;
 }
 
 .hours {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+
+.chart-wrapper {
+  position: relative;
+  height: 100px;
+  width: 50vw;
+  margin: auto;
 }
 </style>
