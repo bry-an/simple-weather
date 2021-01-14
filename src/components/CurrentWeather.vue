@@ -102,7 +102,7 @@ export default {
       else if (degree >= 191.25 && degree < 258.75) return 'SW'
       else if (degree >= 258.75 && degree < 281.25) return 'W'
       else if (degree >= 281.25 && degree < 348.75) return 'NW'
-      else return '?'
+      else return ''
     },
     iconUrl() {
       // return 'https://openweathermap.org/img/wn/' + this.day?.weather[0].icon + '.png'
