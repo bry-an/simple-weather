@@ -50,7 +50,14 @@ export default {
   },
   mixins: [tempConversionMixin],
   computed: {
-    ...mapGetters(['selectedDayDt', 'fahrenheit', 'temperatureUnit']),
+    ...mapGetters([
+      'selectedDayDt',
+      'fahrenheit',
+      'temperatureUnit',
+      'dayOneSelected',
+      'current',
+      'firstHour'
+    ]),
     selectedDate() {
       // * Should be of that format
       // * Thursday 10 PM · Light Snow
@@ -58,7 +65,10 @@ export default {
       const printDay = new Intl.DateTimeFormat('en-US', { weekday: 'long' })
       // ! why does it start with Saturday??!?
       // const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Friday', 'Saturday']
-      const cDate = new Date(this.selectedDayDt ? this.selectedDayDt * 1000 : 0)
+      let cDate
+      if (this.dayOneSelected)
+        cDate = new Date(this.firstHour ? this.firstHour?.startTime : 0)
+      else cDate = new Date(this.selectedDayDt ? this.selectedDayDt * 1000 : 0)
       // const cDay = days[cDate.getDay()]
       const cDay = printDay.format(cDate)
       const cHour24 = cDate.getHours()
@@ -78,9 +88,19 @@ export default {
     },
     selectedTemp() {
       // ! not accurate to the hour
-      const temp = this.fahrenheit
-        ? Math.round(this.selectedDay?.temp.day)
-        : this.fahrenheitToCelsius(Math.round(this.selectedDay?.temp.day))
+      // different if it's the first day -- get the current weather
+      let temp = ''
+      if (this.dayOneSelected) {
+        temp = this.fahrenheit
+          ? Math.round(this.firstHour ? this.firstHour.temperature : 0)
+          : this.fahrenheitToCelsius(
+              this.firstHour ? Math.round(this.firstHour.temperature) : 0
+            )
+      } else {
+        temp = this.fahrenheit
+          ? Math.round(this.selectedDay?.temp.day)
+          : this.fahrenheitToCelsius(Math.round(this.selectedDay?.temp.day))
+      }
       return Number.isNaN(temp) ? '' : temp
     },
     selectedHumidity() {
@@ -89,9 +109,17 @@ export default {
     },
     selectedWind() {
       // ! not accurate to the hour
-      return Math.round(this.selectedDay?.wind_speed)
+      if (this.dayOneSelected) {
+        if (!this.firstHour?.windSpeed) return ''
+        return Math.round(parseInt(this.firstHour.windSpeed))
+      }
+      if (!this.selectedDay?.wind_speed) return ''
+      return Math.round(this.selectedDay.wind_speed)
     },
     selectedWindDirection() {
+      if (this.dayOneSelected) {
+        return this.firstHour?.windDirection
+      }
       // http://snowfence.umn.edu/Components/winddirectionanddegreeswithouttable3.htm
       const degree = this.selectedDay?.wind_deg
       if (degree >= 348.75 && degree < 11.25) return 'N'
@@ -125,6 +153,12 @@ export default {
           break
         case 'light snow':
           icon = 'snow.svg'
+          break
+        case 'moderate rain':
+          icon = 'rain.svg'
+          break
+        case 'light rain':
+          icon = 'rain.svg'
           break
         default:
           return 'https://place-hold.it/50&text=icon'

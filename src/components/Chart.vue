@@ -61,22 +61,22 @@ export default {
     chartInstance: null
   }),
   computed: {
-    ...mapGetters(['hourlyChartData']),
+    ...mapGetters(['hourlyChartData', 'hourly']),
     minTemp() {
-      let smallest = this.hourlyChartData[0].y
-      this.hourlyChartData.forEach((item) => {
-        if (item.y < smallest) {
-          smallest = item.y
+      let smallest = this.hourly[0].temperature
+      this.hourly.forEach((item) => {
+        if (item.temperature < smallest) {
+          smallest = item.temperature
         }
       })
       console.log('min temp runs', smallest)
       return smallest
     },
     maxTemp() {
-      let largest = this.hourlyChartData[0].y
-      this.hourlyChartData.forEach((item) => {
-        if (item.y > largest) {
-          largest = item.y
+      let largest = this.hourly[0].temperature
+      this.hourly.forEach((item) => {
+        if (item.temperature > largest) {
+          largest = item.temperature
         }
       })
       return largest

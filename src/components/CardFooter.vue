@@ -32,9 +32,8 @@ export default {
 .footer {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  min-height: 100px;
   border-top: 1px solid black;
-  overflow-x: scroll;
+  overflow-x: auto;
+  justify-content: space-between;
 }
 </style>

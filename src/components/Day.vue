@@ -64,6 +64,14 @@ export default {
         case 'light snow':
           icon = 'snow.svg'
           break
+        case 'moderate rain':
+          icon = 'rain.svg'
+          break
+        case 'light rain':
+          icon = 'rain.svg'
+          break
+        // clear-night.svg
+        // wind.svg
         default:
           return 'https://place-hold.it/50&text=icon'
       }
@@ -80,7 +88,7 @@ export default {
 
 <style scoped>
 .day-container {
-  width: 100%;
+  min-width: 100px;
   display: flex;
   justify-content: center;
   align-items: center;

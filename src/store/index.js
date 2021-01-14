@@ -49,6 +49,14 @@ export default new Vuex.Store({
     },
     temperatureUnit(state) {
       return state.temperatureUnit
+    },
+    dayOneSelected(state) {
+      if (!state.selectedDay) return true
+      if (!state.dailyWeather) return false
+      return state.selectedDay.dt === state.dailyWeather.daily[0].dt
+    },
+    firstHour(state) {
+      return state.hourlyWeather?.properties.periods[0]
     }
   },
   mutations: {
@@ -99,6 +107,7 @@ export default new Vuex.Store({
       const url = `https://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=${lat}&lon=${lon}&appid=f3d7426d2e77aa4e3212b0537db8d3a8`
       const response = await axios.get(url)
       commit('SET_DAILY_WEATHER', response.data)
+      commit('SET_CURRENT_WEATHER', response.data.current)
       await dispatch('getHourlyWeather', { lat, lon }) // await this response, before we call:
       dispatch('setSelectedDay', response.data.daily[0])
       state.dailyIsLoaded = true // let's leave it
