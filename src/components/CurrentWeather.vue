@@ -26,7 +26,11 @@
         <div class="weather-report">
           <div>Humidity: {{ selectedHumidity }}%</div>
           <div>Wind: {{ selectedWind }} MPH {{ selectedWindDirection }}</div>
-          <div>Show More</div>
+          <a
+            class="show-more-link"
+            href="https://darksky.net/forecast/39.8621,-105.0504/us12/en"
+            >Show More</a
+          >
         </div>
       </div>
     </div>
@@ -139,6 +143,10 @@ export default {
 </script>
 
 <style scoped>
+a.show-more-link {
+  text-decoration: none;
+  font-weight: bold;
+}
 .temp {
   font-size: 3rem;
   font-family: sans-serif;

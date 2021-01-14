@@ -35,5 +35,6 @@ export default {
   justify-content: space-evenly;
   min-height: 100px;
   border-top: 1px solid black;
+  overflow-x: scroll;
 }
 </style>
