@@ -6,18 +6,23 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import tempConversionMixin from '../mixins/tempConversion.js'
 export default {
   name: 'Hour',
   props: { hourData: { type: Object, required: true } },
   computed: {
+    ...mapGetters(['fahrenheit']),
     temp() {
-      return this.hourData.temperature
+      const temp = this.hourData.temperature
+      return this.fahrenheit ? temp : this.fahrenheitToCelsius(temp)
     },
     hour() {
       const hr24 = new Date(this.hourData.startTime).getHours()
       return hr24 > 12 ? hr24 - 12 + 'PM' : hr24 === 0 ? 12 + 'AM' : hr24 + 'AM'
     }
-  }
+  },
+  mixins: [tempConversionMixin]
 }
 </script>
 

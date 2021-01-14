@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import tempConversionMixin from '../mixins/tempConversion.js'
 export default {
   name: 'Day',
   props: {
@@ -20,18 +22,22 @@ export default {
       default: false
     }
   },
+  mixins: [tempConversionMixin],
   data: () => ({}),
   computed: {
+    ...mapGetters(['fahrenheit']),
     dayOfTheWeek() {
       return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
         new Date(this.day.dt * 1000).getDay()
       ]
     },
     tempMax() {
-      return Math.round(this.day.temp.max)
+      const temp = Math.round(this.day.temp.max)
+      return this.fahrenheit ? temp : this.fahrenheitToCelsius(temp)
     },
     tempMin() {
-      return Math.round(this.day.temp.min)
+      const temp = Math.round(this.day.temp.min)
+      return this.fahrenheit ? temp : this.fahrenheitToCelsius(temp)
     },
     iconUrl() {
       // return 'https://openweathermap.org/img/wn/' + this.day?.weather[0].icon + '.png'
@@ -49,6 +55,15 @@ export default {
         case 'clear sky':
           icon = 'clear-day.svg'
           break
+        case 'few clouds':
+          icon = 'partly-cloudy-day.svg'
+          break
+        case 'snow':
+          icon = 'snow.svg'
+          break
+        case 'light snow':
+          icon = 'snow.svg'
+          break
         default:
           return 'https://place-hold.it/50&text=icon'
       }
@@ -57,7 +72,7 @@ export default {
   },
   methods: {
     selectDay() {
-      this.$store.commit('SET_SELECTED_DAY', this.day)
+      this.$store.dispatch('setSelectedDay', this.day)
     }
   }
 }
@@ -70,14 +85,18 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  min-height: 20px;
   cursor: pointer;
   padding: 1rem;
-  border: 1.4px solid #ffffffff;
+  border-right: 1.4px solid gray;
+  border-top: 1.4px solid gray;
 }
 .day-container.selected-day {
   opacity: 1;
-  border: 1.4px solid gray;
+  background-color: #eeeeee;
+  border-top: 1.5px solid black;
+}
+.day-container:last-child {
+  border-right: none;
 }
 .day-container > * {
   margin: 3px;
