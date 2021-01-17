@@ -17,7 +17,8 @@ export default new Vuex.Store({
     hourlyChartData: null,
     dailyWeather: null,
     city: '',
-    temperatureUnit: 'f'
+    temperatureUnit: 'f',
+    currentPosition: null
   },
   getters: {
     daily(state) {
@@ -80,6 +81,17 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    getGeoLocation({ state }) {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const coords = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          }
+          state.currentPosition = coords
+        })
+      }
+    },
     async getCurrentWeather({ state, commit }, cityName) {
       state.currentIsLoaded = false
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=f3d7426d2e77aa4e3212b0537db8d3a8`
@@ -88,6 +100,10 @@ export default new Vuex.Store({
       state.currentIsLoaded = true
     },
     getHourlyWeather({ state, commit }, { lat, lon }) {
+      if (state.currentPosition) {
+        lat = state.currentPosition.lat
+        lon = state.currentPosition.lng
+      }
       state.hourlyIsLoaded = false
       const initialUrl = `https://api.weather.gov/points/${lat},${lon}`
       return axios.get(initialUrl).then((initialResponse) => {

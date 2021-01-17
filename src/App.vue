@@ -34,7 +34,7 @@ export default {
 
 <style scoped>
 .card {
-  width: 60%;
+  width: 645px;
   margin: auto;
 }
 </style>
