@@ -2,8 +2,10 @@
   <div class="input-container">
     <autocomplete
       id="location-input"
+      item-type="city"
       :items="citySearchResults"
       @change-search-term="search"
+      @item-selected="selectCity"
     />
   </div>
 </template>
@@ -25,8 +27,11 @@ export default {
   },
   methods: {
     search(name) {
-      console.log('searching for', name)
       this.$store.dispatch('runCitySearch', name)
+    },
+    selectCity(item) {
+      const { lat, lng } = item.coords
+      this.$store.dispatch('updateLocation', { lat, lng })
     }
   }
 }
@@ -36,6 +41,7 @@ export default {
 #location-input {
   width: 100%;
 }
+
 .input-container {
   width: 625px;
   margin: auto;
