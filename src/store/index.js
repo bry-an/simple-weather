@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { openWeatherMapClient, nwsClient } from '../serviceClients/index.js'
-
+import { dateParser, createChartData } from '../utilities/index.js'
 Vue.use(Vuex)
 
 const getDefaultState = () => ({
@@ -53,7 +53,7 @@ const getters = {
     return state.temperatureUnit
   },
   dayOneSelected(state) {
-    if (!state.selectedDay) return true
+    if (!state.selectedDay) return true // if user has not selected a day, should default to first day selected
     if (!state.dailyWeather) return false
     return state.selectedDay.dt === state.dailyWeather.daily[0].dt
   },
@@ -62,14 +62,8 @@ const getters = {
   }
 }
 const mutations = {
-  SET_DAILY_WEATHER(state, dailyWeather) {
-    state.dailyWeather = dailyWeather
-  },
   SET_HOURLY_WEATHER(state, hourlyWeather) {
     state.hourlyWeather = hourlyWeather
-  },
-  SET_CURRENT_WEATHER(state, currentWeather) {
-    state.currentWeather = currentWeather
   },
   SET_HOURLY_EIGHT(state, hourlyEightWeather) {
     state.hourlyEightWeather = hourlyEightWeather
@@ -135,13 +129,13 @@ const actions = {
         // snake_case_kinda_looks_like_ar_snake
         ;`
         _________         _________
-        /         \       /         \
+       /         \       /         \
       /  /~~~~~\  \     /  /~~~~~\  \
       |  |     |  |     |  |     |  |
       |  |     |  |     |  |     |  |
       |  |     |  |     |  |     |  |         /
       |  |     |  |     |  |     |  |       //
-      (o  o)    \  \_____/  /     \  \_____/ /
+     (o  o)    \  \_____/  /     \  \_____/ /
       \__/      \         /       \        /
         |        ~~~~~~~~~         ~~~~~~~~
         ^
@@ -149,43 +143,16 @@ const actions = {
       })
       .catch((e) => console.error('Error getting daily weather', JSON.stringify(e)))
   },
-  getHourlyEight({ state, commit, dispatch }) {
-    // parse hourly weather into eight days
-    const dateSelected = new Date(state.selectedDay.dt * 1000)
-    const dateRightNow = new Date()
-    // figure out where to start
-
-    // assuming the selected day is the same as the day it is right now by default
-    let x = 0
-
-    // if not then finding where to start
-    if (dateSelected.toString().slice(0, 15) !== dateRightNow.toString().slice(0, 15)) {
-      const index = state.hourlyWeather.properties.periods.findIndex(
-        (i) =>
-          new Date(i.startTime).toString().slice(0, 15) ===
-          dateSelected.toString().slice(0, 15)
-      )
-      x = index >= 0 ? index : NaN
-    }
-
-    const hourlyEightData = [
-      state.hourlyWeather.properties.periods[x + 0],
-      state.hourlyWeather.properties.periods[x + 3],
-      state.hourlyWeather.properties.periods[x + 6],
-      state.hourlyWeather.properties.periods[x + 9],
-      state.hourlyWeather.properties.periods[x + 12],
-      state.hourlyWeather.properties.periods[x + 15],
-      state.hourlyWeather.properties.periods[x + 18],
-      state.hourlyWeather.properties.periods[x + 21]
-    ]
+  getHourlyEight({ commit, state, dispatch }) {
+    const hourlyEightData = dateParser({
+      selectedDay: state.selectedDay,
+      hourlyWeather: state.hourlyWeather
+    })
     commit('SET_HOURLY_EIGHT', hourlyEightData)
     dispatch('createChartData')
   },
   createChartData({ state, commit }) {
-    const chartData = state.hourlyEightWeather.map((hour) => ({
-      x: new Date(hour.startTime),
-      y: hour.temperature
-    }))
+    const chartData = createChartData(state.hourlyEightWeather)
     commit('SET_HOURLY_EIGHT_CHART_DATA', chartData)
   }
 }
