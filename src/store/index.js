@@ -19,7 +19,8 @@ export default new Vuex.Store({
     city: '',
     temperatureUnit: 'f',
     currentPosition: null,
-    citySearchResults: []
+    citySearchResults: [],
+    selectedCity: 'Denver, CO, United States of America'
   },
   getters: {
     citySearchResults(state) {
@@ -62,6 +63,12 @@ export default new Vuex.Store({
     },
     firstHour(state) {
       return state.hourlyWeather?.properties.periods[0]
+    },
+    selectedCity(state) {
+      // chop off last value in city (country)
+      const city = state.selectedCity
+      const cityArr = city.split(',')
+      return cityArr.slice(0, -1).join(',')
     }
   },
   mutations: {
@@ -85,10 +92,14 @@ export default new Vuex.Store({
     },
     SET_CITY_SEARCH_RESULTS(state, results) {
       state.citySearchResults = results
+    },
+    SET_SELECTED_CITY(state, cityName) {
+      state.selectedCity = cityName
     }
   },
   actions: {
-    updateLocation({ dispatch }, { lat, lng }) {
+    updateLocation({ dispatch, commit }, { lat, lng, name }) {
+      commit('SET_SELECTED_CITY', name)
       dispatch('getDailyWeather', { lat, lng })
     },
     async runCitySearch({ commit }, searchTerm) {

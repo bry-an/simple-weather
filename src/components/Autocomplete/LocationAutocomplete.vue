@@ -31,7 +31,7 @@ export default {
     },
     selectCity(item) {
       const { lat, lng } = item.coords
-      this.$store.dispatch('updateLocation', { lat, lng })
+      this.$store.dispatch('updateLocation', { lat, lng, name: item.name })
     }
   }
 }
