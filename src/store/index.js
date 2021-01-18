@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import openWeatherMapService from '../serviceClients/openWeatherMap.js'
 
 Vue.use(Vuex)
 
@@ -120,8 +121,10 @@ export default new Vuex.Store({
     },
     async getDailyWeather({ state, commit, dispatch }, { lat, lon }) {
       state.dailyIsLoaded = false
-      const url = `https://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=${lat}&lon=${lon}&appid=f3d7426d2e77aa4e3212b0537db8d3a8`
-      const response = await axios.get(url)
+      // const url = `https://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=${lat}&lon=${lon}&appid=f3d7426d2e77aa4e3212b0537db8d3a8`
+      // const response = await axios.get(url)
+      const response = await openWeatherMapService.getDailyWeather({ lat, lon })
+      console.log('anything here?', response)
       commit('SET_DAILY_WEATHER', response.data)
       commit('SET_CURRENT_WEATHER', response.data.current)
       await dispatch('getHourlyWeather', { lat, lon }) // await this response, before we call:
