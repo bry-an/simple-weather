@@ -79,6 +79,12 @@ const mutations = {
   },
   SET_UNIT(state, unit) {
     state.temperatureUnit = unit
+  },
+  FETCH_WEATHER_END(state, weather) {
+    state.selectedDay = weather.daily[0]
+    state.dailyWeather = weather
+    state.currentWeather = weather.current
+    state.dailyIsLoaded = true
   }
 }
 const actions = {
@@ -94,44 +100,57 @@ const actions = {
     }
   },
   getHourlyWeather({ state, commit }, { lat, lon }) {
+    // set browser-derived location if one exists
     if (state.currentPosition) {
       lat = state.currentPosition.lat
       lon = state.currentPosition.lng
     }
     state.hourlyIsLoaded = false
-    return nwsClient.getHourlyWeather({ lat, lon }).then((hourlyWeather) => {
-      commit('SET_HOURLY_WEATHER', hourlyWeather)
-      state.hourlyIsLoaded = true
-    })
+    return nwsClient
+      .getHourlyWeather({ lat, lon })
+      .then((hourlyWeather) => {
+        commit('SET_HOURLY_WEATHER', hourlyWeather)
+        state.hourlyIsLoaded = true
+        return hourlyWeather
+      })
+      .catch((e) => console.error(JSON.stringify(e)))
   },
   setSelectedDay({ state, dispatch }, day) {
     state.selectedDay = day
     dispatch('getHourlyEight')
   },
-  async getDailyWeather({ state, commit, dispatch }, { lat, lon }) {
+  getAllWeather({ dispatch }, coords) {
+    return dispatch('getDailyWeather', coords)
+      .then(() => dispatch('getHourlyWeather', coords))
+      .then((res) => (res ? dispatch('getHourlyEight') : null))
+  },
+  getDailyWeather({ state, commit }, coords) {
+    // get daily weather for next  days
     state.dailyIsLoaded = false
-    const response = await openWeatherMapClient.getDailyWeather({ lat, lon })
-    commit('SET_DAILY_WEATHER', response.data)
-    commit('SET_CURRENT_WEATHER', response.data.current)
-    await dispatch('getHourlyWeather', { lat, lon }) // await this response, before we call:
-    dispatch('setSelectedDay', response.data.daily[0])
-    state.dailyIsLoaded = true // let's leave it
-    // snake_case_kinda_looks_like_ar_snake
-    ;`
-       _________         _________
-      /         \       /         \
-     /  /~~~~~\  \     /  /~~~~~\  \
-     |  |     |  |     |  |     |  |
-     |  |     |  |     |  |     |  |
-     |  |     |  |     |  |     |  |         /
-     |  |     |  |     |  |     |  |       //
-    (o  o)    \  \_____/  /     \  \_____/ /
-     \__/      \         /       \        /
-       |        ~~~~~~~~~         ~~~~~~~~
-       ^
-    `
+    return openWeatherMapClient
+      .getDailyWeather(coords)
+      .then((response) => {
+        const weather = response && response.data
+        commit('FETCH_WEATHER_END', weather)
+        // snake_case_kinda_looks_like_ar_snake
+        ;`
+        _________         _________
+        /         \       /         \
+      /  /~~~~~\  \     /  /~~~~~\  \
+      |  |     |  |     |  |     |  |
+      |  |     |  |     |  |     |  |
+      |  |     |  |     |  |     |  |         /
+      |  |     |  |     |  |     |  |       //
+      (o  o)    \  \_____/  /     \  \_____/ /
+      \__/      \         /       \        /
+        |        ~~~~~~~~~         ~~~~~~~~
+        ^
+      `
+      })
+      .catch((e) => console.error('Error getting daily weather', JSON.stringify(e)))
   },
   getHourlyEight({ state, commit, dispatch }) {
+    // parse hourly weather into eight days
     const dateSelected = new Date(state.selectedDay.dt * 1000)
     const dateRightNow = new Date()
     // figure out where to start
