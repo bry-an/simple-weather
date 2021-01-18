@@ -1,6 +1,8 @@
 import { ApiClient } from './BaseApiClient.js'
 
-const openWeatherMapService = new ApiClient('https://api.openweathermap.org/data/2.5/')
+const openWeatherMapService = new ApiClient({
+  resource: 'https://api.openweathermap.org/data/2.5/'
+})
 
 export default {
   getDailyWeather: ({ lat, lon }) =>
