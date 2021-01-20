@@ -1,2 +1,1 @@
-import { debounce } from './debounce.js'
-export { debounce }
+export * from './debounce.js'
