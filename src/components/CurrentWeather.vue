@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="current-weather">
-      <div class="city">Denver, CO</div>
+      <div class="city">{{ selectedCity }}</div>
       <div class="synopsis">{{ selectedDate }}</div>
     </div>
     <div>
@@ -56,7 +56,8 @@ export default {
       'temperatureUnit',
       'dayOneSelected',
       'current',
-      'firstHour'
+      'firstHour',
+      'selectedCity'
     ]),
     selectedDate() {
       // * Should be of that format

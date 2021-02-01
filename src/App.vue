@@ -1,15 +1,18 @@
 <template>
   <div id="app">
+    <location-autocomplete />
     <div class="card"><Card /></div>
   </div>
 </template>
 
 <script>
 import Card from '@C/Card.vue'
+import LocationAutocomplete from '@C/Autocomplete/LocationAutocomplete.vue'
 
 export default {
   name: 'App',
   components: {
+    LocationAutocomplete,
     Card
   },
   data: () => ({}),
