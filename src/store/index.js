@@ -18,9 +18,14 @@ export default new Vuex.Store({
     dailyWeather: null,
     city: '',
     temperatureUnit: 'f',
-    currentPosition: null
+    currentPosition: null,
+    citySearchResults: [],
+    selectedCity: 'Denver, CO, United States of America'
   },
   getters: {
+    citySearchResults(state) {
+      return state.citySearchResults
+    },
     daily(state) {
       return state.dailyWeather?.daily
     },
@@ -58,6 +63,12 @@ export default new Vuex.Store({
     },
     firstHour(state) {
       return state.hourlyWeather?.properties.periods[0]
+    },
+    selectedCity(state) {
+      // chop off last value in city (country)
+      const city = state.selectedCity
+      const cityArr = city.split(',')
+      return cityArr.slice(0, -1).join(',')
     }
   },
   mutations: {
@@ -78,9 +89,30 @@ export default new Vuex.Store({
     },
     SET_UNIT(state, unit) {
       state.temperatureUnit = unit
+    },
+    SET_CITY_SEARCH_RESULTS(state, results) {
+      state.citySearchResults = results
+    },
+    SET_SELECTED_CITY(state, cityName) {
+      state.selectedCity = cityName
     }
   },
   actions: {
+    updateLocation({ dispatch, commit }, { lat, lng, name }) {
+      commit('SET_SELECTED_CITY', name)
+      dispatch('getDailyWeather', { lat, lng })
+    },
+    async runCitySearch({ commit }, searchTerm) {
+      return axios
+        .get(`http://localhost:8081/api/city/search/${searchTerm}`)
+        .then((response) => {
+          if (response.data) {
+            commit('SET_CITY_SEARCH_RESULTS', response.data)
+          } else {
+            throw new Error('Failed getting city search results')
+          }
+        })
+    },
     getGeoLocation({ state }) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((pos) => {
@@ -99,7 +131,8 @@ export default new Vuex.Store({
       commit('SET_CURRENT_WEATHER', response.data)
       state.currentIsLoaded = true
     },
-    getHourlyWeather({ state, commit }, { lat, lon }) {
+    getHourlyWeather({ state, commit }, { lat, lng }) {
+      let lon = lng
       if (state.currentPosition) {
         lat = state.currentPosition.lat
         lon = state.currentPosition.lng
@@ -118,13 +151,13 @@ export default new Vuex.Store({
       state.selectedDay = day
       dispatch('getHourlyEight')
     },
-    async getDailyWeather({ state, commit, dispatch }, { lat, lon }) {
+    async getDailyWeather({ state, commit, dispatch }, { lat, lng }) {
       state.dailyIsLoaded = false
-      const url = `https://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=${lat}&lon=${lon}&appid=f3d7426d2e77aa4e3212b0537db8d3a8`
+      const url = `https://api.openweathermap.org/data/2.5/onecall?units=imperial&lat=${lat}&lon=${lng}&appid=f3d7426d2e77aa4e3212b0537db8d3a8`
       const response = await axios.get(url)
       commit('SET_DAILY_WEATHER', response.data)
       commit('SET_CURRENT_WEATHER', response.data.current)
-      await dispatch('getHourlyWeather', { lat, lon }) // await this response, before we call:
+      await dispatch('getHourlyWeather', { lat, lng }) // await this response, before we call:
       dispatch('setSelectedDay', response.data.daily[0])
       state.dailyIsLoaded = true // let's leave it
       // snake_case_kinda_looks_like_ar_snake
