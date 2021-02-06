@@ -4,5 +4,5 @@
     "paths": {
       "@C/*": ["./src/components/*"]
     }
-  },
+  }
 }

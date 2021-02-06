@@ -73,6 +73,7 @@ export default {
         // clear-night.svg
         // wind.svg
         default:
+          console.log('\n\n\n\n\n', this.day?.weather[0].description)
           return 'https://place-hold.it/50&text=icon'
       }
       return `https://duckduckgo.com/assets/weather/svg/new/${icon}`

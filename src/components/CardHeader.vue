@@ -48,8 +48,7 @@ export default {
 .chart-wrapper {
   position: relative;
   height: 100px;
-  width: 50vw;
+  width: 90%;
   margin: auto;
 }
 </style>
-u
