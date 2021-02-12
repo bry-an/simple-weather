@@ -27,6 +27,7 @@ export default {
   },
   methods: {
     search(name) {
+      console.log('searching', name)
       this.$store.dispatch('runCitySearch', name)
     },
     selectCity(item) {

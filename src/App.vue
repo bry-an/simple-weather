@@ -17,7 +17,7 @@ export default {
   },
   data: () => ({}),
   computed: {},
-  methods: {}
+  methods: {},
 }
 </script>
 
