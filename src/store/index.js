@@ -139,6 +139,7 @@ const actions = {
       \__/      \         /       \        /
         |        ~~~~~~~~~         ~~~~~~~~
         ^
+        🐀
       `
       })
       .catch((e) => console.error('Error getting daily weather', JSON.stringify(e)))
@@ -154,6 +155,9 @@ const actions = {
   createChartData({ state, commit }) {
     const chartData = createChartData(state.hourlyEightWeather)
     commit('SET_HOURLY_EIGHT_CHART_DATA', chartData)
+  },
+  testAction() {
+    return 'hi'
   }
 }
 
