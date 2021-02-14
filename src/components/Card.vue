@@ -15,7 +15,7 @@ export default {
   props: {},
   data: () => ({}),
   created() {
-    this.$store.dispatch('getAllWeather', 'denver')
+    this.$store.dispatch('getWeather', 'Denver')
   }
 }
 </script>

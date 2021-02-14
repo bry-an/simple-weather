@@ -14,10 +14,7 @@ export default {
   components: {
     LocationAutocomplete,
     Card
-  },
-  data: () => ({}),
-  computed: {},
-  methods: {},
+  }
 }
 </script>
 

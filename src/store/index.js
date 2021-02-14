@@ -55,6 +55,9 @@ const getters = {
   },
   selectedCity(state) {
     return state.selectedCity
+  },
+  weatherIsLoaded(state) {
+    return state.weatherIsLoaded
   }
 }
 const mutations = {
@@ -66,9 +69,6 @@ const mutations = {
   },
   SET_SELECTED_CITY(state, cityName) {
     state.selectedCity = cityName
-  },
-  SET_HOURLY_WEATHER(state, hourlyWeather) {
-    state.hourlyWeather = hourlyWeather
   },
   SET_HOURLY_EIGHT(state, hourlyEightWeather) {
     state.hourlyEightWeather = hourlyEightWeather
@@ -82,8 +82,11 @@ const mutations = {
   FETCH_WEATHER_END(state, weather) {
     console.log('fetch weather end', weather)
     state.selectedDay = weather.hourlyForecast[0]
-    state.dailyWeather = weather.dailyForecast
+    // we receive two items for one day - 6 am and 6 pm
+    // only using evening information from days (6 pm)
+    state.dailyWeather = weather.dailyForecast.filter((i) => !i.isDaytime)
     state.currentWeather = weather.currentForecast
+    state.hourlyWeather = weather.hourlyForecast
     state.weatherIsLoaded = true
   },
   SET_SELECTED_DAY(state, day) {
@@ -94,7 +97,7 @@ const actions = {
   // ! ??
   updateLocation({ dispatch, commit }, { name }) {
     commit('SET_SELECTED_CITY', name)
-    dispatch('getDailyWeather', name)
+    dispatch('getWeather', name)
   },
   async runCitySearch({ commit }, searchTerm) {
     return citySearchClient.getCityData(searchTerm).then((response) => {
@@ -131,7 +134,7 @@ const actions = {
           commit('FETCH_WEATHER_END', weather)
           dispatch('getHourlyEight')
         }
-        // snake_case_kinda_looks_like_ar_snake
+        // snake_case_kinda_looks_like_a_snake
         `
         _________         _________
        /         \       /         \
@@ -161,6 +164,10 @@ const actions = {
     const chartData = createChartData(state.hourlyEightWeather)
     commit('SET_HOURLY_EIGHT_CHART_DATA', chartData)
   },
+  setSelectedDay({ commit, dispatch }, day) {
+    commit('SET_SELECTED_DAY', day)
+    dispatch('getHourlyEight')
+  }
 }
 
 export default new Vuex.Store({

@@ -62,6 +62,7 @@ export default {
   }),
   computed: {
     ...mapGetters(['hourlyChartData', 'hourly']),
+
     minTemp() {
       let smallest = this.hourly[0].temperature
       this.hourly.forEach((item) => {
