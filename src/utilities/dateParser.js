@@ -1,7 +1,7 @@
 export const dateParser = ({ selectedDay, hourlyWeather }) => {
   if (!selectedDay || !hourlyWeather) return null
   // parse hourly weather into eight days
-  const dateSelected = new Date(selectedDay.dt * 1000)
+  const dateSelected = new Date(selectedDay.startTime)
   const dateRightNow = new Date()
   // figure out where to start
 
@@ -10,7 +10,7 @@ export const dateParser = ({ selectedDay, hourlyWeather }) => {
 
   // if not then finding where to start
   if (dateSelected.toString().slice(0, 15) !== dateRightNow.toString().slice(0, 15)) {
-    const index = hourlyWeather.properties?.periods?.findIndex(
+    const index = hourlyWeather.findIndex(
       (i) =>
         new Date(i.startTime).toString().slice(0, 15) ===
         dateSelected.toString().slice(0, 15)
@@ -18,7 +18,7 @@ export const dateParser = ({ selectedDay, hourlyWeather }) => {
     x = index >= 0 ? index : NaN
   }
   return [0, 3, 6, 9, 12, 15, 18, 21].reduce(
-    (accum, curr) => accum.concat(hourlyWeather.properties?.periods?.[x + curr]),
+    (accum, curr) => accum.concat(hourlyWeather[x + curr]),
     []
   )
 }
