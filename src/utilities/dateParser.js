@@ -15,6 +15,7 @@ export const dateParser = ({ selectedDay, hourlyWeather }) => {
         new Date(i.startTime).toString().slice(0, 15) ===
         dateSelected.toString().slice(0, 15)
     )
+
     x = index >= 0 ? index : NaN
   }
   return [0, 3, 6, 9, 12, 15, 18, 21].reduce(
@@ -28,3 +29,23 @@ export const createChartData = (hourlyEightWeather) =>
     x: new Date(hour.startTime),
     y: hour.temperature
   }))
+
+export const dailyMinMax = ({ selectedDay, hourlyWeather }) => {
+  if (!selectedDay || !hourlyWeather) return null
+  const dateSelected = new Date(selectedDay.startTime)
+
+  const dayArray = []
+
+  for (const hour of hourlyWeather) {
+    const hourDate = new Date(hour.startTime)
+    if (
+      hourDate.getFullYear() === dateSelected.getFullYear() &&
+      hourDate.getMonth() === dateSelected.getMonth() &&
+      hourDate.getDate() === dateSelected.getDate()
+    ) {
+      dayArray.push(hour.temperature)
+    }
+  }
+
+  return { min: Math.min(...dayArray), max: Math.max(...dayArray) }
+}

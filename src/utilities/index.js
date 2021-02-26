@@ -1,1 +1,1 @@
-export { dateParser, createChartData } from './dateParser.js'
+export { dateParser, createChartData, dailyMinMax } from './dateParser.js'

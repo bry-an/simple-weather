@@ -22,7 +22,6 @@ export default {
   },
   methods: {
     isSelectedDay(day) {
-      console.log('day', day)
       return (
         new Date(day.startTime).toString().slice(0, 15) ===
         new Date(this.selectedDayDt).toString().slice(0, 15)

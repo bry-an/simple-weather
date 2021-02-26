@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { citySearchClient, vueportClient } from '../serviceClients/index.js'
-import { dateParser, createChartData } from '../utilities/index.js'
+import { dateParser, createChartData, dailyMinMax } from '../utilities/index.js'
 Vue.use(Vuex)
 
 const getDefaultState = () => ({
@@ -12,6 +12,7 @@ const getDefaultState = () => ({
   hourlyWeather: null,
   hourlyEightWeather: null,
   hourlyChartData: null,
+  dailyMinMax: null,
   dailyWeather: null,
   temperatureUnit: 'f',
   currentPosition: null,
@@ -43,6 +44,9 @@ const getters = {
   },
   hourlyChartData(state) {
     return state.hourlyChartData
+  },
+  dailyMinMax(state) {
+    return state.dailyMinMax
   },
   fahrenheit(state) {
     return state.temperatureUnit === 'f'
@@ -87,10 +91,18 @@ const mutations = {
     state.dailyWeather = weather.dailyForecast.filter((i) => !i.isDaytime)
     state.currentWeather = weather.currentForecast
     state.hourlyWeather = weather.hourlyForecast
+    state.dailyMinMax = dailyMinMax({
+      selectedDay: state.selectedDay,
+      hourlyWeather: state.hourlyWeather
+    })
     state.weatherIsLoaded = true
   },
   SET_SELECTED_DAY(state, day) {
     state.selectedDay = day
+    state.dailyMinMax = dailyMinMax({
+      selectedDay: state.selectedDay,
+      hourlyWeather: state.hourlyWeather
+    })
   }
 }
 const actions = {
@@ -130,13 +142,13 @@ const actions = {
         // const weather = !!(response && response.data)
         // 🕵️‍♀️🕵️‍♂️ infiltrating pm2 segfault with double bitwise OR
         if (response) {
+          console.log(123)
           const weather = response.data
           commit('FETCH_WEATHER_END', weather)
           dispatch('getHourlyEight')
         }
         // snake_case_kinda_looks_like_a_snake
         // eslint-disable-next-line
-        // prettier-ignore
         ;`
                                                 
                 _🎩_____                       
@@ -151,13 +163,16 @@ const actions = {
       |  |     |           |     |  |         / 
       |  |     |           |     |  |       //  
      (o  o)    \           /     \  \_____/ /   
-      \__/      \         /       \   🐀  /     
+      \__/      \         /       \     /     
         |        ~~~~~~~~~         ~~~~~~~~
         ^
         🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠cowbo
       `
       })
-      .catch((e) => console.error('Error getting daily weather', JSON.stringify(e)))
+      .catch((hiThereПривет) =>
+        //           Priviet
+        console.error('Error getting daily weather', JSON.stringify(hiThereПривет))
+      )
   },
   getHourlyEight({ commit, state, dispatch }) {
     const hourlyEightData = dateParser({
