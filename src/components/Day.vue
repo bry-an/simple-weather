@@ -60,7 +60,8 @@ export default {
 
 <style scoped>
 .day-container {
-  min-width: 100px;
+  width: 100px;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;

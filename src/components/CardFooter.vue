@@ -38,6 +38,5 @@ export default {
   flex-direction: row;
   border-top: 1px solid black;
   overflow-x: auto;
-  justify-content: space-between;
 }
 </style>

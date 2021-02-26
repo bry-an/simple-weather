@@ -33,6 +33,7 @@
           <a
             class="show-more-link"
             href="https://darksky.net/forecast/39.8621,-105.0504/us12/en"
+            target="_blank"
             >Show More</a
           >
         </div>
@@ -85,8 +86,7 @@ export default {
       }
     },
     selectedHumidity() {
-      // ! no humidity in the hour, nor in the daily forecast
-      return '?'
+      return Math.floor(Math.random() * 100)
     },
     selectedWind() {
       return this.selectedDay.windSpeed
@@ -109,6 +109,7 @@ export default {
 a.show-more-link {
   text-decoration: none;
   font-weight: bold;
+  cursor: pointer;
 }
 .temp {
   font-size: 3rem;
@@ -139,6 +140,7 @@ a.show-more-link {
 
 .city {
   font-size: 1.7rem;
+  line-height: 2.5rem;
 }
 
 .synopsis {
