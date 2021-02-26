@@ -135,19 +135,26 @@ const actions = {
           dispatch('getHourlyEight')
         }
         // snake_case_kinda_looks_like_a_snake
-        `
-        _________         _________
-       /         \       /         \
-      /  /~~~~~\  \     /  /~~~~~\  \
-      |  |     |  |     |  |     |  |
-      |  |     |  |     |  |     |  |
-      |  |     |  |     |  |     |  |         /
-      |  |     |  |     |  |     |  |       //
-     (o  o)    \  \_____/  /     \  \_____/ /
-      \__/      \         /       \        /
+        // eslint-disable-next-line
+        // prettier-ignore
+        ;`
+                                                
+                _🎩_____                       
+               /        \__    __               
+              |       \    \__/  \              
+             /  0      |          \             
+        ____/     | 🐘 |          |             
+       /          \_____/          \            
+      /  /~~~\                      \           
+      |  |    \                     |           
+      |  |     |            _____   |           
+      |  |     |           |     |  |         / 
+      |  |     |           |     |  |       //  
+     (o  o)    \           /     \  \_____/ /   
+      \__/      \         /       \   🐀  /     
         |        ~~~~~~~~~         ~~~~~~~~
         ^
-        🐀
+        🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠cowbo
       `
       })
       .catch((e) => console.error('Error getting daily weather', JSON.stringify(e)))
