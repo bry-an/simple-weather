@@ -14,6 +14,7 @@
 import { mapGetters } from 'vuex'
 import tempConversionMixin from '../mixins/tempConversion.js'
 import iconUrl from '../mixins/iconUrl.js'
+import { dailyMinMax } from '../utilities/dateParser.js'
 
 export default {
   name: 'Day',
@@ -41,13 +42,19 @@ export default {
     },
     tempMax() {
       // ! only one temp exists
-      const temp = this.day.temperature
-      return this.fahrenheit ? temp : this.fahrenheitToCelsius(temp)
+      const { max } = dailyMinMax({
+        selectedDay: this.day,
+        hourlyWeather: this.$store.state.hourlyWeather
+      })
+      return this.fahrenheit ? max : this.fahrenheitToCelsius(max)
     },
     tempMin() {
       // ! only one temp exists
-      const temp = this.day.temperature
-      return this.fahrenheit ? temp : this.fahrenheitToCelsius(temp)
+      const { min } = dailyMinMax({
+        selectedDay: this.day,
+        hourlyWeather: this.$store.state.hourlyWeather
+      })
+      return this.fahrenheit ? min : this.fahrenheitToCelsius(min)
     }
   },
   methods: {

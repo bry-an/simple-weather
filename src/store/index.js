@@ -91,10 +91,6 @@ const mutations = {
     state.dailyWeather = weather.dailyForecast.filter((i) => !i.isDaytime)
     state.currentWeather = weather.currentForecast
     state.hourlyWeather = weather.hourlyForecast
-    state.dailyMinMax = dailyMinMax({
-      selectedDay: state.selectedDay,
-      hourlyWeather: state.hourlyWeather
-    })
     state.weatherIsLoaded = true
   },
   SET_SELECTED_DAY(state, day) {
