@@ -14,10 +14,7 @@ export default {
   components: {
     LocationAutocomplete,
     Card
-  },
-  data: () => ({}),
-  computed: {},
-  methods: {}
+  }
 }
 </script>
 
@@ -36,8 +33,26 @@ export default {
 </style>
 
 <style scoped>
-.card {
-  width: 645px;
+#app {
+  width: 90%;
   margin: auto;
+}
+
+@media screen and (min-width: 640px) {
+  #app {
+    width: 80%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  #app {
+    width: 75%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  #app {
+    width: 60%;
+  }
 }
 </style>

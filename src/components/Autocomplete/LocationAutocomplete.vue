@@ -1,7 +1,6 @@
 <template>
   <div class="input-container">
     <autocomplete
-      id="location-input"
       item-type="city"
       :items="citySearchResults"
       @change-search-term="search"
@@ -27,6 +26,7 @@ export default {
   },
   methods: {
     search(name) {
+      console.log('searching', name)
       this.$store.dispatch('runCitySearch', name)
     },
     selectCity(item) {
@@ -38,13 +38,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#location-input {
-  width: 100%;
-}
-
 .input-container {
-  width: 625px;
-  margin: auto;
-  margin-bottom: 2rem;
+  margin: 2rem auto;
 }
 </style>

@@ -5,6 +5,7 @@
       :placeholder="placeholderText"
       type="text"
       @input="changeSearchTerm"
+      class="city-input"
     />
     <div v-if="showDropdown" class="autocomplete-dropdown">
       <p class="search-result" v-for="item in items" :key="item.name">
@@ -66,12 +67,12 @@ export default {
         this.localInput = ''
       }
     },
-    changeSearchTerm: debounce(function(e) {
+    changeSearchTerm: debounce(function (e) {
       if (e.target.value) {
         // only update search term if value entered
         this.$emit('change-search-term', e.target.value)
       }
-    }, 500),
+    }, 200),
     selectItem(item) {
       this.$emit('item-selected', item)
       this.localInput = item.name
@@ -90,7 +91,7 @@ export default {
   color: blue;
   cursor: pointer;
   padding: 5px 5px;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   &:first-child {
     padding-top: 8px;
   }
@@ -102,5 +103,10 @@ export default {
   border: 1px solid #888;
   border-top: none;
   border-radius: 1px;
+}
+.city-input {
+  border-radius: 3px;
+  height: 2rem;
+  font-size: 1rem;
 }
 </style>

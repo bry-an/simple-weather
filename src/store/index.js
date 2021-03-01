@@ -1,32 +1,34 @@
 /* eslint-disable no-useless-escape */
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { openWeatherMapClient, nwsClient } from '../serviceClients/index.js'
-import { dateParser, createChartData } from '../utilities/index.js'
+import { citySearchClient, vueportClient } from '../serviceClients/index.js'
+import { dateParser, createChartData, dailyMinMax } from '../utilities/index.js'
 Vue.use(Vuex)
 
 const getDefaultState = () => ({
   selectedDay: null,
-  dailyIsLoaded: false,
-  hourlyIsLoaded: false,
+  weatherIsLoaded: null,
   currentWeather: null,
   hourlyWeather: null,
   hourlyEightWeather: null,
   hourlyChartData: null,
+  dailyMinMax: null,
   dailyWeather: null,
-  city: '',
   temperatureUnit: 'f',
-  currentPosition: null
+  currentPosition: null,
+  citySearchResults: [],
+  selectedCity: 'Denver, CO, United States of America',
+  whatThreeWords: ''
 })
 
 const state = getDefaultState()
 
 const getters = {
   daily(state) {
-    return state.dailyWeather?.daily
+    return state.dailyWeather
   },
   hourly(state) {
-    return state.hourlyWeather?.properties.periods
+    return state.hourlyWeather
   },
   current(state) {
     return state.currentWeather
@@ -35,10 +37,7 @@ const getters = {
     return state.selectedDay
   },
   selectedDayDt(state) {
-    return state.selectedDay?.dt
-  },
-  hourlyIsLoaded(state) {
-    return state.hourlyIsLoaded
+    return state.selectedDay?.startTime
   },
   hourlyEight(state) {
     return state.hourlyEightWeather
@@ -46,24 +45,34 @@ const getters = {
   hourlyChartData(state) {
     return state.hourlyChartData
   },
+  dailyMinMax(state) {
+    return state.dailyMinMax
+  },
   fahrenheit(state) {
     return state.temperatureUnit === 'f'
   },
   temperatureUnit(state) {
     return state.temperatureUnit
   },
-  dayOneSelected(state) {
-    if (!state.selectedDay) return true // if user has not selected a day, should default to first day selected
-    if (!state.dailyWeather) return false
-    return state.selectedDay.dt === state.dailyWeather.daily[0].dt
+  citySearchResults(state) {
+    return state.citySearchResults
   },
-  firstHour(state) {
-    return state.hourlyWeather?.properties.periods[0]
+  selectedCity(state) {
+    return state.selectedCity
+  },
+  weatherIsLoaded(state) {
+    return state.weatherIsLoaded
   }
 }
 const mutations = {
-  SET_HOURLY_WEATHER(state, hourlyWeather) {
-    state.hourlyWeather = hourlyWeather
+  RESET_STATE(state) {
+    Object.assign(state, getDefaultState())
+  },
+  SET_CITY_SEARCH_RESULTS(state, results) {
+    state.citySearchResults = results
+  },
+  SET_SELECTED_CITY(state, cityName) {
+    state.selectedCity = cityName
   },
   SET_HOURLY_EIGHT(state, hourlyEightWeather) {
     state.hourlyEightWeather = hourlyEightWeather
@@ -75,74 +84,91 @@ const mutations = {
     state.temperatureUnit = unit
   },
   FETCH_WEATHER_END(state, weather) {
-    state.selectedDay = weather.daily[0]
-    state.dailyWeather = weather
-    state.currentWeather = weather.current
-    state.dailyIsLoaded = true
+    console.log('fetch weather end', weather)
+    state.selectedDay = weather.hourlyForecast[0]
+    // we receive two items for one day - 6 am and 6 pm
+    // only using evening information from days (6 pm)
+    state.dailyWeather = weather.dailyForecast.filter((i) => !i.isDaytime)
+    state.currentWeather = weather.currentForecast
+    state.hourlyWeather = weather.hourlyForecast
+    state.weatherIsLoaded = true
+  },
+  SET_SELECTED_DAY(state, day) {
+    state.selectedDay = day
+    state.dailyMinMax = dailyMinMax({
+      selectedDay: state.selectedDay,
+      hourlyWeather: state.hourlyWeather
+    })
   }
 }
 const actions = {
-  getGeoLocation({ state }) {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        const coords = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        }
-        state.currentPosition = coords
-      })
-    }
+  // ! ??
+  updateLocation({ dispatch, commit }, { name }) {
+    commit('SET_SELECTED_CITY', name)
+    dispatch('getWeather', name)
   },
-  getHourlyWeather({ state, commit }, { lat, lon }) {
-    // set browser-derived location if one exists
-    if (state.currentPosition) {
-      lat = state.currentPosition.lat
-      lon = state.currentPosition.lng
-    }
-    state.hourlyIsLoaded = false
-    return nwsClient
-      .getHourlyWeather({ lat, lon })
-      .then((hourlyWeather) => {
-        commit('SET_HOURLY_WEATHER', hourlyWeather)
-        state.hourlyIsLoaded = true
-        return hourlyWeather
-      })
-      .catch((e) => console.error(JSON.stringify(e)))
+  async runCitySearch({ commit }, searchTerm) {
+    return citySearchClient.getCityData(searchTerm).then((response) => {
+      if (response.data) {
+        commit('SET_CITY_SEARCH_RESULTS', response.data)
+      } else {
+        console.error('Failed getting city search results')
+      }
+    })
   },
-  setSelectedDay({ state, dispatch }, day) {
-    state.selectedDay = day
-    dispatch('getHourlyEight')
-  },
-  getAllWeather({ dispatch }, coords) {
-    return dispatch('getDailyWeather', coords)
-      .then(() => dispatch('getHourlyWeather', coords))
-      .then((res) => (res ? dispatch('getHourlyEight') : null))
-  },
-  getDailyWeather({ state, commit }, coords) {
-    // get daily weather for next  days
-    state.dailyIsLoaded = false
-    return openWeatherMapClient
-      .getDailyWeather(coords)
+  // getGeoLocation({ state }) {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition((pos) => {
+  //       const coords = {
+  //         lat: pos.coords.latitude,
+  //         lng: pos.coords.longitude
+  //       }
+  //       state.currentPosition = coords
+  //     })
+  //   }
+  // },
+  getWeather({ state, commit, dispatch }, city) {
+    state.weatherIsLoaded = false
+    return vueportClient
+      .getCityWeather(city)
       .then((response) => {
-        const weather = response && response.data
-        commit('FETCH_WEATHER_END', weather)
-        // snake_case_kinda_looks_like_ar_snake
+        // console.log(+'2') = 2
+        // console.log(""+2)
+        // console.log(Number.POSITIVE_INFINITY **-true)
+        // const weather = !!(response && response.data)
+        // 🕵️‍♀️🕵️‍♂️ infiltrating pm2 segfault with double bitwise OR
+        if (response) {
+          console.log(123)
+          const weather = response.data
+          commit('FETCH_WEATHER_END', weather)
+          dispatch('getHourlyEight')
+        }
+        // snake_case_kinda_looks_like_a_snake
+        // eslint-disable-next-line
         ;`
-        _________         _________
-       /         \       /         \
-      /  /~~~~~\  \     /  /~~~~~\  \
-      |  |     |  |     |  |     |  |
-      |  |     |  |     |  |     |  |
-      |  |     |  |     |  |     |  |         /
-      |  |     |  |     |  |     |  |       //
-     (o  o)    \  \_____/  /     \  \_____/ /
-      \__/      \         /       \        /
+                                                
+                _🎩_____                       
+               /        \__    __               
+              |       \    \__/  \              
+             /  0      |          \             
+        ____/     | 🐘 |          |             
+       /          \_____/          \            
+      /  /~~~\                      \           
+      |  |    \                     |           
+      |  |     |            _____   |           
+      |  |     |           |     |  |         / 
+      |  |     |           |     |  |       //  
+     (o  o)    \           /     \  \_____/ /   
+      \__/      \         /       \     /     
         |        ~~~~~~~~~         ~~~~~~~~
         ^
-        🐀
+        🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠🤠cowbo
       `
       })
-      .catch((e) => console.error('Error getting daily weather', JSON.stringify(e)))
+      .catch((hiThereПривет) =>
+        //           Priviet
+        console.error('Error getting daily weather', JSON.stringify(hiThereПривет))
+      )
   },
   getHourlyEight({ commit, state, dispatch }) {
     const hourlyEightData = dateParser({
@@ -156,8 +182,9 @@ const actions = {
     const chartData = createChartData(state.hourlyEightWeather)
     commit('SET_HOURLY_EIGHT_CHART_DATA', chartData)
   },
-  testAction() {
-    return 'hi'
+  setSelectedDay({ commit, dispatch }, day) {
+    commit('SET_SELECTED_DAY', day)
+    dispatch('getHourlyEight')
   }
 }
 
