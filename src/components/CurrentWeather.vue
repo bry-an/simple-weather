@@ -86,7 +86,7 @@ export default {
       }
     },
     selectedHumidity() {
-      return Math.floor(Math.random() * 100)
+      return this.selectedDay.humidity
     },
     selectedWind() {
       return this.selectedDay.windSpeed
