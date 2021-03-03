@@ -85,7 +85,7 @@ const mutations = {
   },
   FETCH_WEATHER_END(state, weather) {
     console.log('fetch weather end', weather)
-    state.selectedDay = weather.hourlyForecast[0]
+    state.selectedDay = weather.currentForecast
     // we receive two items for one day - 6 am and 6 pm
     // only using evening information from days (6 pm)
     state.dailyWeather = weather.dailyForecast.filter((i) => !i.isDaytime)
