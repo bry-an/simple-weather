@@ -1,10 +1,10 @@
 <template>
   <div class="footer">
     <Day
-      :key="day.dt"
       v-for="day in daily"
+      :key="day.startTime"
       :day="day"
-      :is-selected-day="selectedDayDt === day.dt"
+      :is-selected-day="isSelectedDay(day)"
     />
   </div>
 </template>
@@ -22,7 +22,10 @@ export default {
   },
   methods: {
     isSelectedDay(day) {
-      return day.dt === this.selectedDay.dt
+      return (
+        new Date(day.startTime).toString().slice(0, 15) ===
+        new Date(this.selectedDayDt).toString().slice(0, 15)
+      )
     }
   }
 }
@@ -32,9 +35,7 @@ export default {
 .footer {
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
-  min-height: 100px;
   border-top: 1px solid black;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 </style>

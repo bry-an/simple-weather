@@ -1,16 +1,16 @@
 <template>
-  <div class="header">
-    <CurrentWeather :selectedDay="selectedDay" />
+  <div class="header" v-if="weatherIsLoaded">
+    <div></div>
+    <CurrentWeather :selected-dDay="selectedDay" />
     <div v-if="hourlyChartData" class="chart-wrapper">
       <Chart />
     </div>
-    <div v-else>:(</div>
-    <div v-if="hourlyIsLoaded" class="hours">
+    <div class="hours">
       <Hour v-for="hourData in hourlyEight" :hourData="hourData" :key="hourData.number" />
     </div>
-    <div v-else class="hours">
-      Loading...
-    </div>
+  </div>
+  <div v-else class="header">
+    <loading-spinner />
   </div>
 </template>
 
@@ -19,17 +19,13 @@ import { mapGetters } from 'vuex'
 import CurrentWeather from '@C/CurrentWeather'
 import Chart from '@C/Chart'
 import Hour from '@C/Hour'
+import LoadingSpinner from '@C/LoadingSpinner.vue'
 
 export default {
   name: 'CardHeader',
-  components: { CurrentWeather, Chart, Hour },
-  props: {},
-  data: () => ({}),
+  components: { CurrentWeather, Chart, Hour, LoadingSpinner },
   computed: {
-    ...mapGetters(['selectedDay', 'hourlyIsLoaded', 'hourlyEight', 'hourlyChartData'])
-  },
-  updated() {
-    console.log('this is a big update..')
+    ...mapGetters(['selectedDay', 'weatherIsLoaded', 'hourlyEight', 'hourlyChartData'])
   }
 }
 </script>
@@ -37,6 +33,7 @@ export default {
 <style scoped>
 .header {
   padding: 20px 20px 0 20px;
+  min-height: 400px;
 }
 
 .hours {
@@ -48,7 +45,7 @@ export default {
 .chart-wrapper {
   position: relative;
   height: 100px;
-  width: 50vw;
+  width: 90%;
   margin: auto;
 }
 </style>

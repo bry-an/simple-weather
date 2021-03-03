@@ -1,20 +1,20 @@
 <template>
   <div id="app">
+    <location-autocomplete />
     <div class="card"><Card /></div>
   </div>
 </template>
 
 <script>
 import Card from '@C/Card.vue'
+import LocationAutocomplete from '@C/Autocomplete/LocationAutocomplete.vue'
 
 export default {
   name: 'App',
   components: {
+    LocationAutocomplete,
     Card
-  },
-  data: () => ({}),
-  computed: {},
-  methods: {}
+  }
 }
 </script>
 
@@ -33,8 +33,26 @@ export default {
 </style>
 
 <style scoped>
-.card {
-  width: 60%;
+#app {
+  width: 90%;
   margin: auto;
+}
+
+@media screen and (min-width: 640px) {
+  #app {
+    width: 80%;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  #app {
+    width: 75%;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  #app {
+    width: 60%;
+  }
 }
 </style>

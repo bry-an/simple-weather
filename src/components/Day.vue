@@ -1,7 +1,10 @@
 <template>
   <div @click="selectDay" :class="['day-container', { 'selected-day': isSelectedDay }]">
     <div class="day">{{ dayOfTheWeek }}</div>
-    <img :src="iconUrl" alt="it's really frosty, but I like it" />
+    <img
+      :src="iconUrl(weatherShortDescription)"
+      alt="it's really frosty, but I like it"
+    />
     <div>{{ tempMax }}°</div>
     <div class="temp-min">{{ tempMin }}°</div>
   </div>
@@ -10,6 +13,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import tempConversionMixin from '../mixins/tempConversion.js'
+import iconUrl from '../mixins/iconUrl.js'
+import { dailyMinMax } from '../utilities/dateParser.js'
+
 export default {
   name: 'Day',
   props: {
@@ -22,52 +28,33 @@ export default {
       default: false
     }
   },
-  mixins: [tempConversionMixin],
+  mixins: [tempConversionMixin, iconUrl],
   data: () => ({}),
   computed: {
     ...mapGetters(['fahrenheit']),
+    weatherShortDescription() {
+      return this.day.shortForecast
+    },
     dayOfTheWeek() {
       return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][
-        new Date(this.day.dt * 1000).getDay()
+        new Date(this.day.startTime).getDay()
       ]
     },
     tempMax() {
-      const temp = Math.round(this.day.temp.max)
-      return this.fahrenheit ? temp : this.fahrenheitToCelsius(temp)
+      // ! only one temp exists
+      const { max } = dailyMinMax({
+        selectedDay: this.day,
+        hourlyWeather: this.$store.state.hourlyWeather
+      })
+      return this.fahrenheit ? max : this.fahrenheitToCelsius(max)
     },
     tempMin() {
-      const temp = Math.round(this.day.temp.min)
-      return this.fahrenheit ? temp : this.fahrenheitToCelsius(temp)
-    },
-    iconUrl() {
-      // return 'https://openweathermap.org/img/wn/' + this.day?.weather[0].icon + '.png'
-      let icon = ''
-      switch (this.day?.weather[0].description) {
-        case 'overcast clouds':
-          icon = 'partly-cloudy-day.svg'
-          break
-        case 'scattered clouds':
-          icon = 'cloudy.svg'
-          break
-        case 'broken clouds':
-          icon = 'cloudy.svg'
-          break
-        case 'clear sky':
-          icon = 'clear-day.svg'
-          break
-        case 'few clouds':
-          icon = 'partly-cloudy-day.svg'
-          break
-        case 'snow':
-          icon = 'snow.svg'
-          break
-        case 'light snow':
-          icon = 'snow.svg'
-          break
-        default:
-          return 'https://place-hold.it/50&text=icon'
-      }
-      return `https://duckduckgo.com/assets/weather/svg/new/${icon}`
+      // ! only one temp exists
+      const { min } = dailyMinMax({
+        selectedDay: this.day,
+        hourlyWeather: this.$store.state.hourlyWeather
+      })
+      return this.fahrenheit ? min : this.fahrenheitToCelsius(min)
     }
   },
   methods: {
@@ -80,7 +67,8 @@ export default {
 
 <style scoped>
 .day-container {
-  width: 100%;
+  width: 100px;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
