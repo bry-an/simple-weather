@@ -2,7 +2,7 @@
 
 A clean, simple weather app to give information clearly and quickly.
 
-Deployed version: <https://simple-weather-sh.surge.sh/>
+Deployed version: <https://rainybysun.tokyo/>
 
 ![screenshot](assets/screenshot.jpg)
 
