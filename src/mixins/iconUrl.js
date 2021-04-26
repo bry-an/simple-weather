@@ -22,7 +22,7 @@ export default {
       }
       weatherShortDescription = weatherShortDescription.toLowerCase()
       const icon = getIcon(weatherShortDescription)
-      return `https://duckduckgo.com/assets/weather/icons/${icon}.svg`
+      return `${process.env.VUE_APP_ICON_BASE_URL}/${icon}.svg`
     }
   }
 }

@@ -1,7 +1,7 @@
 import { ApiClient } from './BaseApiClient.js'
 
 const vueportServiceClient = new ApiClient({
-  resource: 'https://vueport.io/api/weather/'
+  resource: `${process.env.VUE_APP_API_BASE_URL}/weather`
 })
 
 export default {

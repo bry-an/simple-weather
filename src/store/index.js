@@ -84,7 +84,6 @@ const mutations = {
     state.temperatureUnit = unit
   },
   FETCH_WEATHER_END(state, weather) {
-    console.log('fetch weather end', weather)
     state.selectedDay = weather.currentForecast
     // we receive two items for one day - 6 am and 6 pm
     // only using evening information from days (6 pm)
@@ -138,7 +137,6 @@ const actions = {
         // const weather = !!(response && response.data)
         // 🕵️‍♀️🕵️‍♂️ infiltrating pm2 segfault with double bitwise OR
         if (response) {
-          console.log(123)
           const weather = response.data
           commit('FETCH_WEATHER_END', weather)
           dispatch('getHourlyEight')

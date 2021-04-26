@@ -70,7 +70,6 @@ export default {
           smallest = item.temperature
         }
       })
-      console.log('min temp runs', smallest)
       return smallest
     },
     maxTemp() {

@@ -1,6 +1,8 @@
 import { ApiClient } from './BaseApiClient.js'
 
-const nwsClient = new ApiClient({ resource: 'https://api.weather.gov/' })
+const nwsClient = new ApiClient({
+  resource: process.env.VUE_APP_NATIONAL_WEATHER_SERVICE_BASE_URL
+})
 const baseClient = new ApiClient()
 
 export default {
